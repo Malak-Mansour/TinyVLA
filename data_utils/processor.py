@@ -528,7 +528,22 @@ class DataCollatorForSupervisedDataset(object):
             states = torch.tensor(np.array([instance['state'][0:] for instance in instances]))
         else:
             actions = torch.stack([instance['action'] for instance in instances])
-            states = torch.stack([instance['state'][0:] for instance in instances])
+            
+
+            # states = torch.stack([instance['state'][0:] for instance in instances])
+            
+            # import torch.nn.functional as F
+            # max_len = max(instance["state"].shape[0] for instance in instances)
+            # states = torch.stack([
+            #     F.pad(instance["state"], (0, 0, 0, max_len - instance["state"].shape[0]))  for instance in instances
+            # ])
+
+            states = torch.stack([
+                instance["state"][-1]  # or [0] or any other relevant timestep
+                for instance in instances
+            ])
+
+
 
         is_pad_all = torch.stack([instance['is_pad'] for instance in instances])
         batch = dict(

@@ -4,13 +4,23 @@
 # DATA_DIR = '/path/to/your/data_dir'
 
 TASK_CONFIGS = {
-    'example_task_config': { # for local debug
-        'dataset_dir': [
-            "/media/rl/HDD/data/data/act/new_view/8_29_tennis", # task 1
-        ],
-        'episode_len': 1000,  # 1000,
-        'camera_names': ['left', 'right', 'wrist'] # corresponding to image keys saved in h5py files
-    },
+    # 'example_task_config': { # for local debug
+    #     'dataset_dir': [
+    #         "/media/rl/HDD/data/data/act/new_view/8_29_tennis", # task 1
+    #     ],
+    #     'episode_len': 1000,  # 1000,
+    #     'camera_names': ['left', 'right', 'wrist'] # corresponding to image keys saved in h5py files
+    # },
+    # 'your_task_name':{
+    #     'dataset_dir': DATA_DIR + '/your_task_path', # define the path of the dataset
+    #     'episode_len': 1000, #max length of the episode,
+    #     'camera_names': ['front', 'wrist'] # define the camera names which are used as the key when reading data
+    # }
+    'do_manual':{
+        'dataset_dir': '/l/users/malak.mansour/Datasets/do_manual/hdf5', # define the path of the dataset
+        'episode_len': 125, #max length of the episode,
+        'camera_names': ['agentview_rgb', 'eye_in_hand_rgb'] # define the camera names which are used as the key when reading data
+    }
 }
 ####################################################################################
 

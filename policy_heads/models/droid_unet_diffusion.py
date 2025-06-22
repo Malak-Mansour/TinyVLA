@@ -184,7 +184,8 @@ class ConditionalUnet1D(nn.Module):
 
         dsed = diffusion_step_embed_dim
         diffusion_step_encoder = nn.Sequential(
-            SinusoidalPosEmb(dsed, torch.bfloat16),
+            # SinusoidalPosEmb(dsed, torch.bfloat16),
+            SinusoidalPosEmb(dsed, torch.float32),
             nn.Linear(dsed, dsed * 4),
             nn.Mish(),
             nn.Linear(dsed * 4, dsed),
@@ -276,7 +277,7 @@ class ConditionalUnet1D(nn.Module):
             timesteps = timesteps[None].to(sample.device)
         # broadcast to batch dimension in a way that's compatible with ONNX/Core ML
         timesteps = timesteps.expand(sample.shape[0])
-
+        timesteps = timesteps.to(dtype=torch.float32, device=sample.device)
         global_feature = self.diffusion_step_encoder(timesteps)
 
         if global_cond is not None:
