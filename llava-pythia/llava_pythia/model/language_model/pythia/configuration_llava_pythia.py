@@ -177,6 +177,8 @@ class LlavaPythiaConfig(GPTNeoXConfig):
     model_type = "llava_pythia"
 
     def __init__(self, vision_config=None, **kwargs):
+        self.use_cot = kwargs.pop("use_cot", False)
+        
         if vision_config is None:
             self.vision_config = DEFAULT_VISUAL_CONFIG
         else:
