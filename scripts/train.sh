@@ -63,7 +63,7 @@ deepspeed --master_port 29600 --num_gpus=1 --num_nodes=1 ./train_tinyvla.py \
   --bf16 False \
   --output_dir $OUTPUT \
   --max_steps 10000 \
-  --per_device_train_batch_size 32 \
+  --per_device_train_batch_size 4 \
   --gradient_accumulation_steps 1 \
   --save_strategy "steps" \
   --save_steps 1000 \
@@ -83,7 +83,7 @@ deepspeed --master_port 29600 --num_gpus=1 --num_nodes=1 ./train_tinyvla.py \
   --concat "token_cat" \
   --window_size 6 \
   --report_to none \
-  --use_cot True \
+  # --use_cot True \
   --logging_dir $OUTPUT/log
 
 for dir in "$OUTPUT"/*/ ; do

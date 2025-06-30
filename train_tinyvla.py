@@ -50,7 +50,7 @@ class DataArguments:
     image_aspect_ratio: str = 'square'
     task_name: str = field(default="example_task_config")
     skip_mirrored_data: bool = field(default=True)
-    use_cot: bool = field(default=False, metadata={"help": "Enable Chain-of-Thought prompting"})
+    # use_cot: bool = field(default=False, metadata={"help": "Enable Chain-of-Thought prompting"})
 
 @dataclass
 class TrainingArguments(transformers.TrainingArguments):
@@ -280,8 +280,8 @@ def main(config=None, llava_pythia_config=None):
                                                            skip_mirrored_data=config['data_args'].skip_mirrored_data,
                                                            config=config,
                                                            policy_class=config['action_args'].action_head_type, stats_dir_l=stats_dir,
-                                                           sample_weights=sample_weights, train_ratio=train_ratio, return_dataset=True, llava_pythia_process=llava_pythia_process,
-                                                           use_cot=config['data_args'].use_cot  # ✅ add this line
+                                                           sample_weights=sample_weights, train_ratio=train_ratio, return_dataset=True, llava_pythia_process=llava_pythia_process
+                                                        #    ,use_cot=config['data_args'].use_cot  # ✅ add this line
                                                         )
 
     best_ckpt_info = train_bc(train_dataset=train_dataset, model=model, val_dataset=val_dataset, config=config, sampler_params=sampler_params, tokenizer=tokenizer)

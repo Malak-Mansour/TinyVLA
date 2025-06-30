@@ -23,7 +23,9 @@ class EpisodicDataset(torch.utils.data.Dataset):
     with optional augmentations and normalization. The data is loaded from HDF5 files, and padding is applied
     to ensure consistent episode lengths.
     """
-    def __init__(self, dataset_path_list, camera_names, norm_stats, episode_ids, episode_len, chunk_size, policy_class, llava_pythia_process=None, imsize=480, use_cot=False):
+    def __init__(self, dataset_path_list, camera_names, norm_stats, episode_ids, episode_len, chunk_size, policy_class, llava_pythia_process=None, imsize=480
+                #  , use_cot=False
+                 ):
         """
         Initializes the EpisodicDataset class with the given parameters.
         
@@ -57,7 +59,7 @@ class EpisodicDataset(torch.utils.data.Dataset):
         self.policy_class = policy_class
         self.llava_pythia_process = llava_pythia_process
         self.imsize = imsize
-        self.use_cot = use_cot
+        # self.use_cot = use_cot
         if self.imsize == 320:
             print("########################Current Image Size is [180,320]; maybe due to the pretrain data image size###################################")
         if 'diffusion' in self.policy_class:
@@ -228,8 +230,8 @@ class EpisodicDataset(torch.utils.data.Dataset):
             # Infer raw_lang from task directory
             file_name = os.path.basename(os.path.dirname(dataset_path))
             raw_lang = file_name.replace("_", " ")
-            if self.use_cot:
-                raw_lang += "\nLet's think step by step."
+            # if self.use_cot:
+            #     raw_lang += "\nLet's think step by step."
 
         padded_action = np.zeros((self.max_episode_len, original_action_shape[1]), dtype=np.float32)
         padded_action[:action_len] = action
@@ -288,8 +290,8 @@ class EpisodicDataset(torch.utils.data.Dataset):
             'raw_lang': raw_lang
         }
 
-        if self.use_cot and index < 3:
-            print(f"[CoT] raw_lang (index={index}):\n{raw_lang}\n")
+        # if self.use_cot and index < 3:
+        #     print(f"[CoT] raw_lang (index={index}):\n{raw_lang}\n")
 
         return self.llava_pythia_process.forward_process(sample)
 
@@ -398,10 +400,11 @@ class LlavaPythiaProcess:
     
     
         # Chain-of-thought mode
-        if getattr(self.data_args, "use_cot", False):
-            sources["conversations"][0]["value"] += sample['raw_lang'] + "\nLet's think step-by-step."
-        else:
-            sources["conversations"][0]["value"] += sample['raw_lang']
+        # if getattr(self.data_args, "use_cot", False):
+        #     sources["conversations"][0]["value"] += sample['raw_lang'] + "\nLet's think step-by-step."
+        # else:
+        #     sources["conversations"][0]["value"] += sample['raw_lang']
+        sources["conversations"][0]["value"] += sample['raw_lang']
 
 
         # print(sample['obs']['raw_language'].decode('utf-8'))
@@ -624,7 +627,9 @@ def BatchSampler(batch_size, episode_len_l, sample_weights):
 #         return train_dataset, val_dataset, norm_stats, sampler_params
 def load_data(dataset_dir, name_filter, camera_names, batch_size_train, batch_size_val, chunk_size, config,
               skip_mirrored_data=False, policy_class=None, stats_dir_l=None, sample_weights=None,
-              train_ratio=0.99, return_dataset=False, llava_pythia_process=None, use_cot=False):
+              train_ratio=0.99, return_dataset=False, llava_pythia_process=None
+            #   , use_cot=False
+              ):
     dataset_path_list = find_all_hdf5(dataset_dir, skip_mirrored_data)
     dataset_path_list = [n for n in dataset_path_list if name_filter(n)]
 
@@ -663,11 +668,15 @@ def load_data(dataset_dir, name_filter, camera_names, batch_size_train, batch_si
     train_dataset = EpisodicDataset(dataset_path_list, camera_names, norm_stats, train_episode_ids,
                                     train_episode_len, chunk_size, policy_class,
                                     llava_pythia_process=llava_pythia_process,
-                                    imsize=config['training_args'].pretrain_image_size, use_cot=use_cot)
+                                    imsize=config['training_args'].pretrain_image_size
+                                    # , use_cot=use_cot
+                                    )
     val_dataset = EpisodicDataset(dataset_path_list, camera_names, norm_stats, val_episode_ids,
                                   val_episode_len, chunk_size, policy_class,
                                   llava_pythia_process=llava_pythia_process,
-                                  imsize=config['training_args'].pretrain_image_size, use_cot=use_cot)
+                                  imsize=config['training_args'].pretrain_image_size
+                                #   , use_cot=use_cot
+                                  )
 
     sampler_params = {
         'train': {"batch_size": batch_size_train, 'episode_len_l': [train_episode_len], 'sample_weights': sample_weights},
