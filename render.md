@@ -39,7 +39,7 @@ one of these 3:
 - module load gcc-7
 - ⁠module load gcc-8
 
-# library 1
+# Library 1
 ```
 wget https://www.gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.47.tar.bz2
 tar xjf libgpg-error-1.47.tar.bz2
@@ -71,6 +71,7 @@ which gpg-error-config
 gpg-error-config --version
 ```
 
+# Library 2
 ```
 wget https://www.gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.5.3.tar.gz
 tar xzf libgcrypt-1.5.3.tar.gz
