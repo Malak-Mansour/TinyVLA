@@ -31,6 +31,14 @@ conda install -c menpo glfw3
 
 conda install -c menpo osmesa=12.2.2.dev
 
+
+# extra step to install this version of gcc 
+one of these 3:
+- ⁠conda install 
+- module load gcc-7
+- ⁠module load gcc-8
+
+  
 wget https://www.gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.47.tar.bz2
 tar xjf libgpg-error-1.47.tar.bz2
 cd libgpg-error-1.47
