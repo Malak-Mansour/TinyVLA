@@ -341,8 +341,14 @@ class EpisodicDataset(torch.utils.data.Dataset):
             action_len = episode_len - max(0, start_ts - 1)
 
             # Language: infer from folder name
-            file_name = os.path.basename(os.path.dirname(dataset_path))
-            raw_lang = file_name.replace("_", " ")
+            # file_name = os.path.basename(os.path.dirname(dataset_path))
+            # raw_lang = file_name.replace("_", " ")
+            
+            # 👇 Read language attribute
+            raw_lang = ep_group.attrs.get("language", "")
+            if isinstance(raw_lang, bytes):
+                raw_lang = raw_lang.decode("utf-8")
+
             if self.use_cot:
                 raw_lang += "\nLet's think step by step."
 

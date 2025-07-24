@@ -4,9 +4,13 @@ LLM_MODEL_SIZE=410M
 
 
 # path to trained TinyVLA weights
-source_dir="/path/to/trained/VLA/weights"
+# source_dir="/path/to/trained/VLA/weights"
+source_dir="/l/users/malak.mansour/Datasets/TinyVLA"
+
 # new path to save weights
-target_dir="/path/to/save/processed/VLA/weights"
+# target_dir="/path/to/save/processed/VLA/weights"
+target_dir="/l/users/malak.mansour/Datasets/TinyVLA/processed"
+
 
 mkdir -p $target_dir
 

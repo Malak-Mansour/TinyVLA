@@ -100,6 +100,7 @@ def convert_actions(pred_action):
 
     return pred_action
 
+'''
 class llava_pythia_act_policy:
     """
     Policy class for Llava-Pythia action generation.
@@ -204,6 +205,114 @@ class llava_pythia_act_policy:
             expanded_imgs[:, offset:offset + height, :width, :] = pil_imgs.permute(0,2,3,1).cpu().numpy()
         expanded_imgs = torch.tensor(expanded_imgs).to(dtype=pil_imgs.dtype, device=pil_imgs.device) # B H W C
         return expanded_imgs
+'''
+
+# make it output cot reasoning during evaluation
+class llava_pythia_act_policy:
+    """
+    Policy class for Llava-Pythia action generation with CoT reasoning.
+    """
+
+    def __init__(self, policy_config, data_args=None, print_cot=True):
+        super(llava_pythia_act_policy).__init__()
+        self.print_cot = print_cot  # <-- Add this flag to toggle CoT printing
+        self.load_policy(policy_config)
+        self.data_args = data_args
+
+    def load_policy(self, policy_config):
+        self.policy_config = policy_config
+        model_base = policy_config["model_base"] if policy_config['enable_lora'] else None
+        model_name = get_model_name_from_path(policy_config['model_path'])
+        model_path = policy_config["model_path"]
+
+        self.tokenizer, self.policy, self.image_processor, self.context_len = load_pretrained_model(
+            model_path, model_base, model_name, False, False
+        )
+        self.config = LlavaPythiaConfig.from_pretrained('/'.join(model_path.split('/')[:-1]), trust_remote_code=True)
+
+    def generate_reasoning(self, image_tensor, image_tensor_r, states, raw_lang):
+        """Generate CoT reasoning using LLM and print it."""
+        self.conv = conv_templates[self.policy_config['conv_mode']].copy()
+
+        inp = DEFAULT_IM_START_TOKEN + DEFAULT_IMAGE_TOKEN + DEFAULT_IM_END_TOKEN + '\n' + raw_lang \
+              if self.policy.config.mm_use_im_start_end else DEFAULT_IMAGE_TOKEN + '\n' + raw_lang
+        self.conv.append_message(self.conv.roles[0], inp)
+        self.conv.append_message(self.conv.roles[1], None)
+
+        prompt = self.conv.get_prompt() + " <|endoftext|>"
+        input_ids = tokenizer_image_token(prompt, self.tokenizer, IMAGE_TOKEN_INDEX, return_tensors='pt').unsqueeze(0).cuda()
+        attn_mask = input_ids.ne(self.tokenizer.pad_token_id)
+
+        outputs = self.policy.generate(
+            input_ids=input_ids,
+            attention_mask=attn_mask,
+            images=image_tensor,
+            images_r=image_tensor_r,
+            states=states,
+            max_new_tokens=128,
+            do_sample=False,
+            use_cache=True
+        )
+        decoded = self.tokenizer.decode(outputs[0], skip_special_tokens=True)
+        print("\n🔍 Generated CoT Reasoning:\n", decoded)
+
+    def process_batch_to_llava(self, curr_image, robo_state, raw_lang):
+        """Prepares input batch for action prediction + optionally prints reasoning."""
+        self.conv = conv_templates[self.policy_config['conv_mode']].copy()
+
+        if len(curr_image.shape) == 5:
+            curr_image = curr_image.squeeze(0)
+
+        image, image_r = torch.chunk(curr_image, 2, dim=0)
+
+        image = self.expand2square(image, tuple(x for x in self.image_processor.image_mean))
+        image_tensor = self.image_processor.preprocess(image, return_tensors='pt', do_normalize=True,
+                                                       do_rescale=False, do_center_crop=False)['pixel_values'].to(
+            self.policy.device, dtype=self.policy.dtype)
+
+        image_r = self.expand2square(image_r, tuple(x for x in self.image_processor.image_mean))
+        image_tensor_r = self.image_processor.preprocess(image_r, return_tensors='pt', do_normalize=True,
+                                                         do_rescale=False, do_center_crop=False)['pixel_values'].to(
+            self.policy.device, dtype=self.policy.dtype)
+
+        states = robo_state.to(self.policy.device, dtype=self.policy.dtype)
+
+        # 🧠 Optionally print CoT reasoning
+        if self.print_cot:
+            self.generate_reasoning(image_tensor, image_tensor_r, states, raw_lang)
+
+        # Build batch
+        inp = DEFAULT_IM_START_TOKEN + DEFAULT_IMAGE_TOKEN + DEFAULT_IM_END_TOKEN + '\n' + raw_lang \
+              if self.policy.config.mm_use_im_start_end else DEFAULT_IMAGE_TOKEN + '\n' + raw_lang
+        self.conv.append_message(self.conv.roles[0], inp)
+        self.conv.append_message(self.conv.roles[1], None)
+        prompt = self.conv.get_prompt() + " <|endoftext|>"
+        input_ids = tokenizer_image_token(prompt, self.tokenizer, IMAGE_TOKEN_INDEX, return_tensors='pt').unsqueeze(0).cuda()
+        attn_mask = input_ids.ne(self.tokenizer.pad_token_id)
+
+        return {
+            'input_ids': input_ids,
+            'attention_mask': attn_mask,
+            'images': image_tensor,
+            'images_r': image_tensor_r,
+            'states': states,
+        }
+
+    def expand2square(self, pil_imgs, background_color):
+        batch_size, channels, height, width = pil_imgs.shape
+        max_dim = max(height, width)
+        expanded_imgs = np.full((batch_size, max_dim, max_dim, channels), background_color, dtype=np.float32)
+
+        if height == width:
+            expanded_imgs = pil_imgs.permute(0, 2, 3, 1).cpu().numpy()
+        elif height > width:
+            offset = (max_dim - width) // 2
+            expanded_imgs[:, :height, offset:offset + width, :] = pil_imgs.permute(0, 2, 3, 1).cpu().numpy()
+        else:
+            offset = (max_dim - height) // 2
+            expanded_imgs[:, offset:offset + height, :width, :] = pil_imgs.permute(0, 2, 3, 1).cpu().numpy()
+
+        return torch.tensor(expanded_imgs).to(dtype=pil_imgs.dtype, device=pil_imgs.device)
 
 
 def eval_bc(policy, deploy_env, policy_config, save_episode=True, num_rollouts=1, raw_lang=None):
@@ -385,8 +494,10 @@ if __name__ == '__main__':
     #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>hyper parameters<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     action_head = 'droid_diffusion' # specify the action head type
     policy_config = {
-        "model_path": f"/path/to/trained/VLA", # mainly includes the lora weights
-        "model_base": f"/path/to/pretrained/VLM", # used for lora merge weights
+        # "model_path": f"/path/to/trained/VLA", # mainly includes the lora weights
+        # "model_base": f"/path/to/pretrained/VLM", # used for lora merge weights
+        "model_path": "/l/users/malak.mansour/Datasets/TinyVLA/checkpoint-1000",
+        "model_base": "lesjie/Llava-Pythia-400M",
         "enable_lora": True,
         "conv_mode": "pythia",
         "action_head": action_head,
@@ -397,7 +508,9 @@ if __name__ == '__main__':
     #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
     # make policy
-    policy = llava_pythia_act_policy(policy_config)
+    # policy = llava_pythia_act_policy(policy_config)
+    policy = llava_pythia_act_policy(policy_config, print_cot=True)
+
 
     ############################################################################################################
     # This is your own robot environment, you should init a new env object
