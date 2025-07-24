@@ -1,0 +1,1005 @@
+/bin/bash: /l/users/malak.mansour/anaconda3/lib/libtinfo.so.6: no version information available (required by /bin/bash)
+!!output not exists!!
+[2025-07-24 14:24:45,229] [INFO] [real_accelerator.py:110:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-07-24 14:24:53,674] [WARNING] [runner.py:196:fetch_hostfile] Unable to find hostfile, will proceed with training with local resources only.
+Detected CUDA_VISIBLE_DEVICES=0 but ignoring it because one or several of --include/--exclude/--num_gpus/--num_nodes cl args were used. If you want to use CUDA_VISIBLE_DEVICES don't pass any of these arguments to deepspeed.
+[2025-07-24 14:24:53,674] [INFO] [runner.py:555:main] cmd = /l/users/malak.mansour/anaconda3/envs/tinyvla/bin/python3.10 -u -m deepspeed.launcher.launch --world_info=eyJsb2NhbGhvc3QiOiBbMF19 --master_addr=127.0.0.1 --master_port=29600 --enable_each_rank_log=None ./train_tinyvla.py --deepspeed /l/users/malak.mansour/ICL/TinyVLA/llava-pythia/scripts/zero2.json --lora_enable True --lora_module vit llm --load_pretrain False --pretrain_image_size 320 --lora_r 64 --lora_alpha 256 --non_lora_lr 2e-5 --task_name libero --model_name_or_path lesjie/Llava-Pythia-400M --version v0 --tune_mm_mlp_adapter True --freeze_vision_tower True --freeze_backbone True --mm_use_im_start_end False --mm_use_im_patch_token False --image_aspect_ratio pad --group_by_modality_length False --bf16 False --output_dir /l/users/malak.mansour/Datasets/TinyVLA --max_steps 10000 --per_device_train_batch_size 32 --gradient_accumulation_steps 1 --save_strategy steps --save_steps 1000 --save_total_limit 50 --learning_rate 2e-4 --weight_decay 0. --warmup_ratio 0.005 --lr_scheduler_type cosine --logging_steps 10 --tf32 False --model_max_length 2048 --gradient_checkpointing True --dataloader_num_workers 8 --lazy_preprocess True --action_head_type droid_diffusion --use_state True --concat token_cat --window_size 6 --report_to none --use_cot True --logging_dir /l/users/malak.mansour/Datasets/TinyVLA/log
+[2025-07-24 14:24:55,404] [INFO] [real_accelerator.py:110:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-07-24 14:24:57,911] [INFO] [launch.py:145:main] WORLD INFO DICT: {'localhost': [0]}
+[2025-07-24 14:24:57,911] [INFO] [launch.py:151:main] nnodes=1, num_local_procs=1, node_rank=0
+[2025-07-24 14:24:57,911] [INFO] [launch.py:162:main] global_rank_mapping=defaultdict(<class 'list'>, {'localhost': [0]})
+[2025-07-24 14:24:57,911] [INFO] [launch.py:163:main] dist_world_size=1
+[2025-07-24 14:24:57,911] [INFO] [launch.py:165:main] Setting CUDA_VISIBLE_DEVICES=0
+[2025-07-24 14:25:04,006] [INFO] [real_accelerator.py:110:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-07-24 14:25:06,062] [WARNING] [comm.py:152:init_deepspeed_backend] NCCL backend in DeepSpeed not yet implemented
+[2025-07-24 14:25:06,062] [INFO] [comm.py:594:init_distributed] cdb=None
+[2025-07-24 14:25:06,062] [INFO] [comm.py:625:init_distributed] Initializing TorchBackend in DeepSpeed with backend nccl
+The argument `trust_remote_code` is to be used with Auto classes. It has no effect here and is ignored.
+/l/users/malak.mansour/anaconda3/envs/tinyvla/lib/python3.10/site-packages/huggingface_hub/file_download.py:1132: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.
+  warnings.warn(
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+The argument `trust_remote_code` is to be used with Auto classes. It has no effect here and is ignored.
+number of parameters: 7.282612e+07
+Some weights of the model checkpoint at lesjie/Llava-Pythia-400M were not used when initializing LlavaPythiaForCausalLM: ['embed_out.weight']
+- This IS expected if you are initializing LlavaPythiaForCausalLM from the checkpoint of a model trained on another task or with another architecture (e.g. initializing a BertForSequenceClassification model from a BertForPreTraining model).
+- This IS NOT expected if you are initializing LlavaPythiaForCausalLM from the checkpoint of a model that you expect to be exactly identical (initializing a BertForSequenceClassification model from a BertForSequenceClassification model).
+Some weights of LlavaPythiaForCausalLM were not initialized from the model checkpoint at lesjie/Llava-Pythia-400M and are newly initialized: ['embed_out.combine.bias', 'embed_out.combine.weight', 'embed_out.diffusion_step_encoder.1.bias', 'embed_out.diffusion_step_encoder.1.weight', 'embed_out.diffusion_step_encoder.3.bias', 'embed_out.diffusion_step_encoder.3.weight', 'embed_out.down_modules.0.0.blocks.0.block.0.bias', 'embed_out.down_modules.0.0.blocks.0.block.0.weight', 'embed_out.down_modules.0.0.blocks.0.block.1.bias', 'embed_out.down_modules.0.0.blocks.0.block.1.weight', 'embed_out.down_modules.0.0.blocks.1.block.0.bias', 'embed_out.down_modules.0.0.blocks.1.block.0.weight', 'embed_out.down_modules.0.0.blocks.1.block.1.bias', 'embed_out.down_modules.0.0.blocks.1.block.1.weight', 'embed_out.down_modules.0.0.cond_encoder.1.bias', 'embed_out.down_modules.0.0.cond_encoder.1.weight', 'embed_out.down_modules.0.0.residual_conv.bias', 'embed_out.down_modules.0.0.residual_conv.weight', 'embed_out.down_modules.0.1.blocks.0.block.0.bias', 'embed_out.down_modules.0.1.blocks.0.block.0.weight', 'embed_out.down_modules.0.1.blocks.0.block.1.bias', 'embed_out.down_modules.0.1.blocks.0.block.1.weight', 'embed_out.down_modules.0.1.blocks.1.block.0.bias', 'embed_out.down_modules.0.1.blocks.1.block.0.weight', 'embed_out.down_modules.0.1.blocks.1.block.1.bias', 'embed_out.down_modules.0.1.blocks.1.block.1.weight', 'embed_out.down_modules.0.1.cond_encoder.1.bias', 'embed_out.down_modules.0.1.cond_encoder.1.weight', 'embed_out.down_modules.0.2.conv.bias', 'embed_out.down_modules.0.2.conv.weight', 'embed_out.down_modules.1.0.blocks.0.block.0.bias', 'embed_out.down_modules.1.0.blocks.0.block.0.weight', 'embed_out.down_modules.1.0.blocks.0.block.1.bias', 'embed_out.down_modules.1.0.blocks.0.block.1.weight', 'embed_out.down_modules.1.0.blocks.1.block.0.bias', 'embed_out.down_modules.1.0.blocks.1.block.0.weight', 'embed_out.down_modules.1.0.blocks.1.block.1.bias', 'embed_out.down_modules.1.0.blocks.1.block.1.weight', 'embed_out.down_modules.1.0.cond_encoder.1.bias', 'embed_out.down_modules.1.0.cond_encoder.1.weight', 'embed_out.down_modules.1.0.residual_conv.bias', 'embed_out.down_modules.1.0.residual_conv.weight', 'embed_out.down_modules.1.1.blocks.0.block.0.bias', 'embed_out.down_modules.1.1.blocks.0.block.0.weight', 'embed_out.down_modules.1.1.blocks.0.block.1.bias', 'embed_out.down_modules.1.1.blocks.0.block.1.weight', 'embed_out.down_modules.1.1.blocks.1.block.0.bias', 'embed_out.down_modules.1.1.blocks.1.block.0.weight', 'embed_out.down_modules.1.1.blocks.1.block.1.bias', 'embed_out.down_modules.1.1.blocks.1.block.1.weight', 'embed_out.down_modules.1.1.cond_encoder.1.bias', 'embed_out.down_modules.1.1.cond_encoder.1.weight', 'embed_out.down_modules.1.2.conv.bias', 'embed_out.down_modules.1.2.conv.weight', 'embed_out.down_modules.2.0.blocks.0.block.0.bias', 'embed_out.down_modules.2.0.blocks.0.block.0.weight', 'embed_out.down_modules.2.0.blocks.0.block.1.bias', 'embed_out.down_modules.2.0.blocks.0.block.1.weight', 'embed_out.down_modules.2.0.blocks.1.block.0.bias', 'embed_out.down_modules.2.0.blocks.1.block.0.weight', 'embed_out.down_modules.2.0.blocks.1.block.1.bias', 'embed_out.down_modules.2.0.blocks.1.block.1.weight', 'embed_out.down_modules.2.0.cond_encoder.1.bias', 'embed_out.down_modules.2.0.cond_encoder.1.weight', 'embed_out.down_modules.2.0.residual_conv.bias', 'embed_out.down_modules.2.0.residual_conv.weight', 'embed_out.down_modules.2.1.blocks.0.block.0.bias', 'embed_out.down_modules.2.1.blocks.0.block.0.weight', 'embed_out.down_modules.2.1.blocks.0.block.1.bias', 'embed_out.down_modules.2.1.blocks.0.block.1.weight', 'embed_out.down_modules.2.1.blocks.1.block.0.bias', 'embed_out.down_modules.2.1.blocks.1.block.0.weight', 'embed_out.down_modules.2.1.blocks.1.block.1.bias', 'embed_out.down_modules.2.1.blocks.1.block.1.weight', 'embed_out.down_modules.2.1.cond_encoder.1.bias', 'embed_out.down_modules.2.1.cond_encoder.1.weight', 'embed_out.final_conv.0.block.0.bias', 'embed_out.final_conv.0.block.0.weight', 'embed_out.final_conv.0.block.1.bias', 'embed_out.final_conv.0.block.1.weight', 'embed_out.final_conv.1.bias', 'embed_out.final_conv.1.weight', 'embed_out.mid_modules.0.blocks.0.block.0.bias', 'embed_out.mid_modules.0.blocks.0.block.0.weight', 'embed_out.mid_modules.0.blocks.0.block.1.bias', 'embed_out.mid_modules.0.blocks.0.block.1.weight', 'embed_out.mid_modules.0.blocks.1.block.0.bias', 'embed_out.mid_modules.0.blocks.1.block.0.weight', 'embed_out.mid_modules.0.blocks.1.block.1.bias', 'embed_out.mid_modules.0.blocks.1.block.1.weight', 'embed_out.mid_modules.0.cond_encoder.1.bias', 'embed_out.mid_modules.0.cond_encoder.1.weight', 'embed_out.mid_modules.1.blocks.0.block.0.bias', 'embed_out.mid_modules.1.blocks.0.block.0.weight', 'embed_out.mid_modules.1.blocks.0.block.1.bias', 'embed_out.mid_modules.1.blocks.0.block.1.weight', 'embed_out.mid_modules.1.blocks.1.block.0.bias', 'embed_out.mid_modules.1.blocks.1.block.0.weight', 'embed_out.mid_modules.1.blocks.1.block.1.bias', 'embed_out.mid_modules.1.blocks.1.block.1.weight', 'embed_out.mid_modules.1.cond_encoder.1.bias', 'embed_out.mid_modules.1.cond_encoder.1.weight', 'embed_out.norm_after_pool.bias', 'embed_out.norm_after_pool.weight', 'embed_out.up_modules.0.0.blocks.0.block.0.bias', 'embed_out.up_modules.0.0.blocks.0.block.0.weight', 'embed_out.up_modules.0.0.blocks.0.block.1.bias', 'embed_out.up_modules.0.0.blocks.0.block.1.weight', 'embed_out.up_modules.0.0.blocks.1.block.0.bias', 'embed_out.up_modules.0.0.blocks.1.block.0.weight', 'embed_out.up_modules.0.0.blocks.1.block.1.bias', 'embed_out.up_modules.0.0.blocks.1.block.1.weight', 'embed_out.up_modules.0.0.cond_encoder.1.bias', 'embed_out.up_modules.0.0.cond_encoder.1.weight', 'embed_out.up_modules.0.0.residual_conv.bias', 'embed_out.up_modules.0.0.residual_conv.weight', 'embed_out.up_modules.0.1.blocks.0.block.0.bias', 'embed_out.up_modules.0.1.blocks.0.block.0.weight', 'embed_out.up_modules.0.1.blocks.0.block.1.bias', 'embed_out.up_modules.0.1.blocks.0.block.1.weight', 'embed_out.up_modules.0.1.blocks.1.block.0.bias', 'embed_out.up_modules.0.1.blocks.1.block.0.weight', 'embed_out.up_modules.0.1.blocks.1.block.1.bias', 'embed_out.up_modules.0.1.blocks.1.block.1.weight', 'embed_out.up_modules.0.1.cond_encoder.1.bias', 'embed_out.up_modules.0.1.cond_encoder.1.weight', 'embed_out.up_modules.0.2.conv.bias', 'embed_out.up_modules.0.2.conv.weight', 'embed_out.up_modules.1.0.blocks.0.block.0.bias', 'embed_out.up_modules.1.0.blocks.0.block.0.weight', 'embed_out.up_modules.1.0.blocks.0.block.1.bias', 'embed_out.up_modules.1.0.blocks.0.block.1.weight', 'embed_out.up_modules.1.0.blocks.1.block.0.bias', 'embed_out.up_modules.1.0.blocks.1.block.0.weight', 'embed_out.up_modules.1.0.blocks.1.block.1.bias', 'embed_out.up_modules.1.0.blocks.1.block.1.weight', 'embed_out.up_modules.1.0.cond_encoder.1.bias', 'embed_out.up_modules.1.0.cond_encoder.1.weight', 'embed_out.up_modules.1.0.residual_conv.bias', 'embed_out.up_modules.1.0.residual_conv.weight', 'embed_out.up_modules.1.1.blocks.0.block.0.bias', 'embed_out.up_modules.1.1.blocks.0.block.0.weight', 'embed_out.up_modules.1.1.blocks.0.block.1.bias', 'embed_out.up_modules.1.1.blocks.0.block.1.weight', 'embed_out.up_modules.1.1.blocks.1.block.0.bias', 'embed_out.up_modules.1.1.blocks.1.block.0.weight', 'embed_out.up_modules.1.1.blocks.1.block.1.bias', 'embed_out.up_modules.1.1.blocks.1.block.1.weight', 'embed_out.up_modules.1.1.cond_encoder.1.bias', 'embed_out.up_modules.1.1.cond_encoder.1.weight', 'embed_out.up_modules.1.2.conv.bias', 'embed_out.up_modules.1.2.conv.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+########################################
+########################################
+Adding LoRA adapters...
+PeftModelForCausalLM(
+  (base_model): LoraModel(
+    (model): LlavaPythiaForCausalLM(
+      (gpt_neox): LLavaPythiaModel(
+        (embed_in): Embedding(50304, 512)
+        (emb_dropout): Dropout(p=0.0, inplace=False)
+        (layers): ModuleList(
+          (0-5): 6 x GPTNeoXLayer(
+            (input_layernorm): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+            (post_attention_layernorm): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+            (post_attention_dropout): Dropout(p=0.0, inplace=False)
+            (post_mlp_dropout): Dropout(p=0.0, inplace=False)
+            (attention): GPTNeoXAttention(
+              (rotary_emb): GPTNeoXRotaryEmbedding()
+              (query_key_value): Linear(
+                in_features=512, out_features=1536, bias=True
+                (lora_dropout): ModuleDict(
+                  (default): Dropout(p=0.05, inplace=False)
+                )
+                (lora_A): ModuleDict(
+                  (default): Linear(in_features=512, out_features=64, bias=False)
+                )
+                (lora_B): ModuleDict(
+                  (default): Linear(in_features=64, out_features=1536, bias=False)
+                )
+                (lora_embedding_A): ParameterDict()
+                (lora_embedding_B): ParameterDict()
+              )
+              (dense): Linear(
+                in_features=512, out_features=512, bias=True
+                (lora_dropout): ModuleDict(
+                  (default): Dropout(p=0.05, inplace=False)
+                )
+                (lora_A): ModuleDict(
+                  (default): Linear(in_features=512, out_features=64, bias=False)
+                )
+                (lora_B): ModuleDict(
+                  (default): Linear(in_features=64, out_features=512, bias=False)
+                )
+                (lora_embedding_A): ParameterDict()
+                (lora_embedding_B): ParameterDict()
+              )
+              (attention_dropout): Dropout(p=0.0, inplace=False)
+            )
+            (mlp): GPTNeoXMLP(
+              (dense_h_to_4h): Linear(
+                in_features=512, out_features=2048, bias=True
+                (lora_dropout): ModuleDict(
+                  (default): Dropout(p=0.05, inplace=False)
+                )
+                (lora_A): ModuleDict(
+                  (default): Linear(in_features=512, out_features=64, bias=False)
+                )
+                (lora_B): ModuleDict(
+                  (default): Linear(in_features=64, out_features=2048, bias=False)
+                )
+                (lora_embedding_A): ParameterDict()
+                (lora_embedding_B): ParameterDict()
+              )
+              (dense_4h_to_h): Linear(
+                in_features=2048, out_features=512, bias=True
+                (lora_dropout): ModuleDict(
+                  (default): Dropout(p=0.05, inplace=False)
+                )
+                (lora_A): ModuleDict(
+                  (default): Linear(in_features=2048, out_features=64, bias=False)
+                )
+                (lora_B): ModuleDict(
+                  (default): Linear(in_features=64, out_features=512, bias=False)
+                )
+                (lora_embedding_A): ParameterDict()
+                (lora_embedding_B): ParameterDict()
+              )
+              (act): GELUActivation()
+            )
+          )
+        )
+        (final_layer_norm): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+        (vision_tower): CLIPVisionTower(
+          (vision_model): CLIPVisionTransformer(
+            (embeddings): CLIPVisionEmbeddings(
+              (patch_embedding): Conv2d(3, 1024, kernel_size=(14, 14), stride=(14, 14), bias=False)
+              (position_embedding): Embedding(577, 1024)
+            )
+            (pre_layrnorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+            (encoder): CLIPEncoder(
+              (layers): ModuleList(
+                (0-23): 24 x CLIPEncoderLayer(
+                  (self_attn): CLIPAttention(
+                    (k_proj): Linear(
+                      in_features=1024, out_features=1024, bias=True
+                      (lora_dropout): ModuleDict(
+                        (default): Dropout(p=0.05, inplace=False)
+                      )
+                      (lora_A): ModuleDict(
+                        (default): Linear(in_features=1024, out_features=64, bias=False)
+                      )
+                      (lora_B): ModuleDict(
+                        (default): Linear(in_features=64, out_features=1024, bias=False)
+                      )
+                      (lora_embedding_A): ParameterDict()
+                      (lora_embedding_B): ParameterDict()
+                    )
+                    (v_proj): Linear(
+                      in_features=1024, out_features=1024, bias=True
+                      (lora_dropout): ModuleDict(
+                        (default): Dropout(p=0.05, inplace=False)
+                      )
+                      (lora_A): ModuleDict(
+                        (default): Linear(in_features=1024, out_features=64, bias=False)
+                      )
+                      (lora_B): ModuleDict(
+                        (default): Linear(in_features=64, out_features=1024, bias=False)
+                      )
+                      (lora_embedding_A): ParameterDict()
+                      (lora_embedding_B): ParameterDict()
+                    )
+                    (q_proj): Linear(
+                      in_features=1024, out_features=1024, bias=True
+                      (lora_dropout): ModuleDict(
+                        (default): Dropout(p=0.05, inplace=False)
+                      )
+                      (lora_A): ModuleDict(
+                        (default): Linear(in_features=1024, out_features=64, bias=False)
+                      )
+                      (lora_B): ModuleDict(
+                        (default): Linear(in_features=64, out_features=1024, bias=False)
+                      )
+                      (lora_embedding_A): ParameterDict()
+                      (lora_embedding_B): ParameterDict()
+                    )
+                    (out_proj): Linear(
+                      in_features=1024, out_features=1024, bias=True
+                      (lora_dropout): ModuleDict(
+                        (default): Dropout(p=0.05, inplace=False)
+                      )
+                      (lora_A): ModuleDict(
+                        (default): Linear(in_features=1024, out_features=64, bias=False)
+                      )
+                      (lora_B): ModuleDict(
+                        (default): Linear(in_features=64, out_features=1024, bias=False)
+                      )
+                      (lora_embedding_A): ParameterDict()
+                      (lora_embedding_B): ParameterDict()
+                    )
+                  )
+                  (layer_norm1): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+                  (mlp): CLIPMLP(
+                    (activation_fn): QuickGELUActivation()
+                    (fc1): Linear(
+                      in_features=1024, out_features=4096, bias=True
+                      (lora_dropout): ModuleDict(
+                        (default): Dropout(p=0.05, inplace=False)
+                      )
+                      (lora_A): ModuleDict(
+                        (default): Linear(in_features=1024, out_features=64, bias=False)
+                      )
+                      (lora_B): ModuleDict(
+                        (default): Linear(in_features=64, out_features=4096, bias=False)
+                      )
+                      (lora_embedding_A): ParameterDict()
+                      (lora_embedding_B): ParameterDict()
+                    )
+                    (fc2): Linear(
+                      in_features=4096, out_features=1024, bias=True
+                      (lora_dropout): ModuleDict(
+                        (default): Dropout(p=0.05, inplace=False)
+                      )
+                      (lora_A): ModuleDict(
+                        (default): Linear(in_features=4096, out_features=64, bias=False)
+                      )
+                      (lora_B): ModuleDict(
+                        (default): Linear(in_features=64, out_features=1024, bias=False)
+                      )
+                      (lora_embedding_A): ParameterDict()
+                      (lora_embedding_B): ParameterDict()
+                    )
+                  )
+                  (layer_norm2): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+                )
+              )
+            )
+            (post_layernorm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+          )
+        )
+        (mm_projector): Sequential(
+          (0): Linear(in_features=1024, out_features=512, bias=True)
+          (1): GELU(approximate='none')
+          (2): Linear(in_features=512, out_features=512, bias=True)
+        )
+      )
+      (proj_to_action): Identity()
+      (embed_out): ConditionalUnet1D(
+        (global_1d_pool): AdaptiveAvgPool1d(output_size=1)
+        (norm_after_pool): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+        (combine): Linear(in_features=519, out_features=512, bias=True)
+        (mid_modules): ModuleList(
+          (0-1): 2 x ConditionalResidualBlock1D(
+            (blocks): ModuleList(
+              (0-1): 2 x Conv1dBlock(
+                (block): Sequential(
+                  (0): Conv1d(1024, 1024, kernel_size=(5,), stride=(1,), padding=(2,))
+                  (1): GroupNorm(8, 1024, eps=1e-05, affine=True)
+                  (2): Mish()
+                )
+              )
+            )
+            (cond_encoder): Sequential(
+              (0): Mish()
+              (1): Linear(in_features=768, out_features=2048, bias=True)
+              (2): Unflatten(dim=-1, unflattened_size=(-1, 1))
+            )
+            (residual_conv): Identity()
+          )
+        )
+        (diffusion_step_encoder): Sequential(
+          (0): SinusoidalPosEmb()
+          (1): Linear(in_features=256, out_features=1024, bias=True)
+          (2): Mish()
+          (3): Linear(in_features=1024, out_features=256, bias=True)
+        )
+        (up_modules): ModuleList(
+          (0): ModuleList(
+            (0): ConditionalResidualBlock1D(
+              (blocks): ModuleList(
+                (0): Conv1dBlock(
+                  (block): Sequential(
+                    (0): Conv1d(2048, 512, kernel_size=(5,), stride=(1,), padding=(2,))
+                    (1): GroupNorm(8, 512, eps=1e-05, affine=True)
+                    (2): Mish()
+                  )
+                )
+                (1): Conv1dBlock(
+                  (block): Sequential(
+                    (0): Conv1d(512, 512, kernel_size=(5,), stride=(1,), padding=(2,))
+                    (1): GroupNorm(8, 512, eps=1e-05, affine=True)
+                    (2): Mish()
+                  )
+                )
+              )
+              (cond_encoder): Sequential(
+                (0): Mish()
+                (1): Linear(in_features=768, out_features=1024, bias=True)
+                (2): Unflatten(dim=-1, unflattened_size=(-1, 1))
+              )
+              (residual_conv): Conv1d(2048, 512, kernel_size=(1,), stride=(1,))
+            )
+            (1): ConditionalResidualBlock1D(
+              (blocks): ModuleList(
+                (0-1): 2 x Conv1dBlock(
+                  (block): Sequential(
+                    (0): Conv1d(512, 512, kernel_size=(5,), stride=(1,), padding=(2,))
+                    (1): GroupNorm(8, 512, eps=1e-05, affine=True)
+                    (2): Mish()
+                  )
+                )
+              )
+              (cond_encoder): Sequential(
+                (0): Mish()
+                (1): Linear(in_features=768, out_features=1024, bias=True)
+                (2): Unflatten(dim=-1, unflattened_size=(-1, 1))
+              )
+              (residual_conv): Identity()
+            )
+            (2): Upsample1d(
+              (conv): ConvTranspose1d(512, 512, kernel_size=(4,), stride=(2,), padding=(1,))
+            )
+          )
+          (1): ModuleList(
+            (0): ConditionalResidualBlock1D(
+              (blocks): ModuleList(
+                (0): Conv1dBlock(
+                  (block): Sequential(
+                    (0): Conv1d(1024, 256, kernel_size=(5,), stride=(1,), padding=(2,))
+                    (1): GroupNorm(8, 256, eps=1e-05, affine=True)
+                    (2): Mish()
+                  )
+                )
+                (1): Conv1dBlock(
+                  (block): Sequential(
+                    (0): Conv1d(256, 256, kernel_size=(5,), stride=(1,), padding=(2,))
+                    (1): GroupNorm(8, 256, eps=1e-05, affine=True)
+                    (2): Mish()
+                  )
+                )
+              )
+              (cond_encoder): Sequential(
+                (0): Mish()
+                (1): Linear(in_features=768, out_features=512, bias=True)
+                (2): Unflatten(dim=-1, unflattened_size=(-1, 1))
+              )
+              (residual_conv): Conv1d(1024, 256, kernel_size=(1,), stride=(1,))
+            )
+            (1): ConditionalResidualBlock1D(
+              (blocks): ModuleList(
+                (0-1): 2 x Conv1dBlock(
+                  (block): Sequential(
+                    (0): Conv1d(256, 256, kernel_size=(5,), stride=(1,), padding=(2,))
+                    (1): GroupNorm(8, 256, eps=1e-05, affine=True)
+                    (2): Mish()
+                  )
+                )
+              )
+              (cond_encoder): Sequential(
+                (0): Mish()
+                (1): Linear(in_features=768, out_features=512, bias=True)
+                (2): Unflatten(dim=-1, unflattened_size=(-1, 1))
+              )
+              (residual_conv): Identity()
+            )
+            (2): Upsample1d(
+              (conv): ConvTranspose1d(256, 256, kernel_size=(4,), stride=(2,), padding=(1,))
+            )
+          )
+        )
+        (down_modules): ModuleList(
+          (0): ModuleList(
+            (0): ConditionalResidualBlock1D(
+              (blocks): ModuleList(
+                (0): Conv1dBlock(
+                  (block): Sequential(
+                    (0): Conv1d(7, 256, kernel_size=(5,), stride=(1,), padding=(2,))
+                    (1): GroupNorm(8, 256, eps=1e-05, affine=True)
+                    (2): Mish()
+                  )
+                )
+                (1): Conv1dBlock(
+                  (block): Sequential(
+                    (0): Conv1d(256, 256, kernel_size=(5,), stride=(1,), padding=(2,))
+                    (1): GroupNorm(8, 256, eps=1e-05, affine=True)
+                    (2): Mish()
+                  )
+                )
+              )
+              (cond_encoder): Sequential(
+                (0): Mish()
+                (1): Linear(in_features=768, out_features=512, bias=True)
+                (2): Unflatten(dim=-1, unflattened_size=(-1, 1))
+              )
+              (residual_conv): Conv1d(7, 256, kernel_size=(1,), stride=(1,))
+            )
+            (1): ConditionalResidualBlock1D(
+              (blocks): ModuleList(
+                (0-1): 2 x Conv1dBlock(
+                  (block): Sequential(
+                    (0): Conv1d(256, 256, kernel_size=(5,), stride=(1,), padding=(2,))
+                    (1): GroupNorm(8, 256, eps=1e-05, affine=True)
+                    (2): Mish()
+                  )
+                )
+              )
+              (cond_encoder): Sequential(
+                (0): Mish()
+                (1): Linear(in_features=768, out_features=512, bias=True)
+                (2): Unflatten(dim=-1, unflattened_size=(-1, 1))
+              )
+              (residual_conv): Identity()
+            )
+            (2): Downsample1d(
+              (conv): Conv1d(256, 256, kernel_size=(3,), stride=(2,), padding=(1,))
+            )
+          )
+          (1): ModuleList(
+            (0): ConditionalResidualBlock1D(
+              (blocks): ModuleList(
+                (0): Conv1dBlock(
+                  (block): Sequential(
+                    (0): Conv1d(256, 512, kernel_size=(5,), stride=(1,), padding=(2,))
+                    (1): GroupNorm(8, 512, eps=1e-05, affine=True)
+                    (2): Mish()
+                  )
+                )
+                (1): Conv1dBlock(
+                  (block): Sequential(
+                    (0): Conv1d(512, 512, kernel_size=(5,), stride=(1,), padding=(2,))
+                    (1): GroupNorm(8, 512, eps=1e-05, affine=True)
+                    (2): Mish()
+                  )
+                )
+              )
+              (cond_encoder): Sequential(
+                (0): Mish()
+                (1): Linear(in_features=768, out_features=1024, bias=True)
+                (2): Unflatten(dim=-1, unflattened_size=(-1, 1))
+              )
+              (residual_conv): Conv1d(256, 512, kernel_size=(1,), stride=(1,))
+            )
+            (1): ConditionalResidualBlock1D(
+              (blocks): ModuleList(
+                (0-1): 2 x Conv1dBlock(
+                  (block): Sequential(
+                    (0): Conv1d(512, 512, kernel_size=(5,), stride=(1,), padding=(2,))
+                    (1): GroupNorm(8, 512, eps=1e-05, affine=True)
+                    (2): Mish()
+                  )
+                )
+              )
+              (cond_encoder): Sequential(
+                (0): Mish()
+                (1): Linear(in_features=768, out_features=1024, bias=True)
+                (2): Unflatten(dim=-1, unflattened_size=(-1, 1))
+              )
+              (residual_conv): Identity()
+            )
+            (2): Downsample1d(
+              (conv): Conv1d(512, 512, kernel_size=(3,), stride=(2,), padding=(1,))
+            )
+          )
+          (2): ModuleList(
+            (0): ConditionalResidualBlock1D(
+              (blocks): ModuleList(
+                (0): Conv1dBlock(
+                  (block): Sequential(
+                    (0): Conv1d(512, 1024, kernel_size=(5,), stride=(1,), padding=(2,))
+                    (1): GroupNorm(8, 1024, eps=1e-05, affine=True)
+                    (2): Mish()
+                  )
+                )
+                (1): Conv1dBlock(
+                  (block): Sequential(
+                    (0): Conv1d(1024, 1024, kernel_size=(5,), stride=(1,), padding=(2,))
+                    (1): GroupNorm(8, 1024, eps=1e-05, affine=True)
+                    (2): Mish()
+                  )
+                )
+              )
+              (cond_encoder): Sequential(
+                (0): Mish()
+                (1): Linear(in_features=768, out_features=2048, bias=True)
+                (2): Unflatten(dim=-1, unflattened_size=(-1, 1))
+              )
+              (residual_conv): Conv1d(512, 1024, kernel_size=(1,), stride=(1,))
+            )
+            (1): ConditionalResidualBlock1D(
+              (blocks): ModuleList(
+                (0-1): 2 x Conv1dBlock(
+                  (block): Sequential(
+                    (0): Conv1d(1024, 1024, kernel_size=(5,), stride=(1,), padding=(2,))
+                    (1): GroupNorm(8, 1024, eps=1e-05, affine=True)
+                    (2): Mish()
+                  )
+                )
+              )
+              (cond_encoder): Sequential(
+                (0): Mish()
+                (1): Linear(in_features=768, out_features=2048, bias=True)
+                (2): Unflatten(dim=-1, unflattened_size=(-1, 1))
+              )
+              (residual_conv): Identity()
+            )
+            (2): Identity()
+          )
+        )
+        (final_conv): Sequential(
+          (0): Conv1dBlock(
+            (block): Sequential(
+              (0): Conv1d(256, 256, kernel_size=(5,), stride=(1,), padding=(2,))
+              (1): GroupNorm(8, 256, eps=1e-05, affine=True)
+              (2): Mish()
+            )
+          )
+          (1): Conv1d(256, 7, kernel_size=(1,), stride=(1,))
+        )
+      )
+    )
+  )
+)
+default_conversation :
+Conversation(system="A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions.", roles=('USER', 'ASSISTANT'), messages=(), offset=0, sep_style=<SeparatorStyle.TWO: 2>, sep=' ', sep2='<|endoftext|>', version='v0', skip_next=False)
+base_model.model.gpt_neox.layers.0.attention.query_key_value.lora_A.default.weight True
+base_model.model.gpt_neox.layers.0.attention.query_key_value.lora_B.default.weight True
+base_model.model.gpt_neox.layers.0.attention.dense.lora_A.default.weight True
+base_model.model.gpt_neox.layers.0.attention.dense.lora_B.default.weight True
+base_model.model.gpt_neox.layers.0.mlp.dense_h_to_4h.lora_A.default.weight True
+base_model.model.gpt_neox.layers.0.mlp.dense_h_to_4h.lora_B.default.weight True
+base_model.model.gpt_neox.layers.0.mlp.dense_4h_to_h.lora_A.default.weight True
+base_model.model.gpt_neox.layers.0.mlp.dense_4h_to_h.lora_B.default.weight True
+base_model.model.gpt_neox.layers.1.attention.query_key_value.lora_A.default.weight True
+base_model.model.gpt_neox.layers.1.attention.query_key_value.lora_B.default.weight True
+base_model.model.gpt_neox.layers.1.attention.dense.lora_A.default.weight True
+base_model.model.gpt_neox.layers.1.attention.dense.lora_B.default.weight True
+base_model.model.gpt_neox.layers.1.mlp.dense_h_to_4h.lora_A.default.weight True
+base_model.model.gpt_neox.layers.1.mlp.dense_h_to_4h.lora_B.default.weight True
+base_model.model.gpt_neox.layers.1.mlp.dense_4h_to_h.lora_A.default.weight True
+base_model.model.gpt_neox.layers.1.mlp.dense_4h_to_h.lora_B.default.weight True
+base_model.model.gpt_neox.layers.2.attention.query_key_value.lora_A.default.weight True
+base_model.model.gpt_neox.layers.2.attention.query_key_value.lora_B.default.weight True
+base_model.model.gpt_neox.layers.2.attention.dense.lora_A.default.weight True
+base_model.model.gpt_neox.layers.2.attention.dense.lora_B.default.weight True
+base_model.model.gpt_neox.layers.2.mlp.dense_h_to_4h.lora_A.default.weight True
+base_model.model.gpt_neox.layers.2.mlp.dense_h_to_4h.lora_B.default.weight True
+base_model.model.gpt_neox.layers.2.mlp.dense_4h_to_h.lora_A.default.weight True
+base_model.model.gpt_neox.layers.2.mlp.dense_4h_to_h.lora_B.default.weight True
+base_model.model.gpt_neox.layers.3.attention.query_key_value.lora_A.default.weight True
+base_model.model.gpt_neox.layers.3.attention.query_key_value.lora_B.default.weight True
+base_model.model.gpt_neox.layers.3.attention.dense.lora_A.default.weight True
+base_model.model.gpt_neox.layers.3.attention.dense.lora_B.default.weight True
+base_model.model.gpt_neox.layers.3.mlp.dense_h_to_4h.lora_A.default.weight True
+base_model.model.gpt_neox.layers.3.mlp.dense_h_to_4h.lora_B.default.weight True
+base_model.model.gpt_neox.layers.3.mlp.dense_4h_to_h.lora_A.default.weight True
+base_model.model.gpt_neox.layers.3.mlp.dense_4h_to_h.lora_B.default.weight True
+base_model.model.gpt_neox.layers.4.attention.query_key_value.lora_A.default.weight True
+base_model.model.gpt_neox.layers.4.attention.query_key_value.lora_B.default.weight True
+base_model.model.gpt_neox.layers.4.attention.dense.lora_A.default.weight True
+base_model.model.gpt_neox.layers.4.attention.dense.lora_B.default.weight True
+base_model.model.gpt_neox.layers.4.mlp.dense_h_to_4h.lora_A.default.weight True
+base_model.model.gpt_neox.layers.4.mlp.dense_h_to_4h.lora_B.default.weight True
+base_model.model.gpt_neox.layers.4.mlp.dense_4h_to_h.lora_A.default.weight True
+base_model.model.gpt_neox.layers.4.mlp.dense_4h_to_h.lora_B.default.weight True
+base_model.model.gpt_neox.layers.5.attention.query_key_value.lora_A.default.weight True
+base_model.model.gpt_neox.layers.5.attention.query_key_value.lora_B.default.weight True
+base_model.model.gpt_neox.layers.5.attention.dense.lora_A.default.weight True
+base_model.model.gpt_neox.layers.5.attention.dense.lora_B.default.weight True
+base_model.model.gpt_neox.layers.5.mlp.dense_h_to_4h.lora_A.default.weight True
+base_model.model.gpt_neox.layers.5.mlp.dense_h_to_4h.lora_B.default.weight True
+base_model.model.gpt_neox.layers.5.mlp.dense_4h_to_h.lora_A.default.weight True
+base_model.model.gpt_neox.layers.5.mlp.dense_4h_to_h.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.0.self_attn.k_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.0.self_attn.k_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.0.self_attn.v_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.0.self_attn.v_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.0.self_attn.q_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.0.self_attn.q_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.0.self_attn.out_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.0.self_attn.out_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.0.mlp.fc1.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.0.mlp.fc1.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.0.mlp.fc2.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.0.mlp.fc2.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.1.self_attn.k_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.1.self_attn.k_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.1.self_attn.v_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.1.self_attn.v_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.1.self_attn.q_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.1.self_attn.q_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.1.self_attn.out_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.1.self_attn.out_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.1.mlp.fc1.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.1.mlp.fc1.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.1.mlp.fc2.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.1.mlp.fc2.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.2.self_attn.k_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.2.self_attn.k_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.2.self_attn.v_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.2.self_attn.v_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.2.self_attn.q_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.2.self_attn.q_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.2.self_attn.out_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.2.self_attn.out_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.2.mlp.fc1.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.2.mlp.fc1.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.2.mlp.fc2.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.2.mlp.fc2.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.3.self_attn.k_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.3.self_attn.k_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.3.self_attn.v_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.3.self_attn.v_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.3.self_attn.q_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.3.self_attn.q_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.3.self_attn.out_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.3.self_attn.out_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.3.mlp.fc1.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.3.mlp.fc1.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.3.mlp.fc2.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.3.mlp.fc2.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.4.self_attn.k_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.4.self_attn.k_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.4.self_attn.v_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.4.self_attn.v_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.4.self_attn.q_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.4.self_attn.q_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.4.self_attn.out_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.4.self_attn.out_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.4.mlp.fc1.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.4.mlp.fc1.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.4.mlp.fc2.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.4.mlp.fc2.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.5.self_attn.k_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.5.self_attn.k_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.5.self_attn.v_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.5.self_attn.v_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.5.self_attn.q_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.5.self_attn.q_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.5.self_attn.out_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.5.self_attn.out_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.5.mlp.fc1.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.5.mlp.fc1.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.5.mlp.fc2.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.5.mlp.fc2.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.6.self_attn.k_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.6.self_attn.k_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.6.self_attn.v_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.6.self_attn.v_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.6.self_attn.q_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.6.self_attn.q_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.6.self_attn.out_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.6.self_attn.out_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.6.mlp.fc1.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.6.mlp.fc1.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.6.mlp.fc2.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.6.mlp.fc2.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.7.self_attn.k_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.7.self_attn.k_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.7.self_attn.v_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.7.self_attn.v_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.7.self_attn.q_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.7.self_attn.q_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.7.self_attn.out_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.7.self_attn.out_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.7.mlp.fc1.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.7.mlp.fc1.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.7.mlp.fc2.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.7.mlp.fc2.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.8.self_attn.k_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.8.self_attn.k_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.8.self_attn.v_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.8.self_attn.v_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.8.self_attn.q_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.8.self_attn.q_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.8.self_attn.out_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.8.self_attn.out_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.8.mlp.fc1.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.8.mlp.fc1.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.8.mlp.fc2.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.8.mlp.fc2.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.9.self_attn.k_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.9.self_attn.k_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.9.self_attn.v_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.9.self_attn.v_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.9.self_attn.q_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.9.self_attn.q_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.9.self_attn.out_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.9.self_attn.out_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.9.mlp.fc1.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.9.mlp.fc1.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.9.mlp.fc2.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.9.mlp.fc2.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.10.self_attn.k_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.10.self_attn.k_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.10.self_attn.v_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.10.self_attn.v_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.10.self_attn.q_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.10.self_attn.q_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.10.self_attn.out_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.10.self_attn.out_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.10.mlp.fc1.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.10.mlp.fc1.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.10.mlp.fc2.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.10.mlp.fc2.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.11.self_attn.k_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.11.self_attn.k_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.11.self_attn.v_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.11.self_attn.v_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.11.self_attn.q_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.11.self_attn.q_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.11.self_attn.out_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.11.self_attn.out_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.11.mlp.fc1.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.11.mlp.fc1.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.11.mlp.fc2.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.11.mlp.fc2.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.12.self_attn.k_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.12.self_attn.k_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.12.self_attn.v_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.12.self_attn.v_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.12.self_attn.q_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.12.self_attn.q_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.12.self_attn.out_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.12.self_attn.out_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.12.mlp.fc1.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.12.mlp.fc1.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.12.mlp.fc2.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.12.mlp.fc2.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.13.self_attn.k_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.13.self_attn.k_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.13.self_attn.v_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.13.self_attn.v_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.13.self_attn.q_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.13.self_attn.q_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.13.self_attn.out_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.13.self_attn.out_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.13.mlp.fc1.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.13.mlp.fc1.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.13.mlp.fc2.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.13.mlp.fc2.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.14.self_attn.k_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.14.self_attn.k_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.14.self_attn.v_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.14.self_attn.v_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.14.self_attn.q_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.14.self_attn.q_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.14.self_attn.out_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.14.self_attn.out_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.14.mlp.fc1.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.14.mlp.fc1.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.14.mlp.fc2.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.14.mlp.fc2.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.15.self_attn.k_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.15.self_attn.k_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.15.self_attn.v_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.15.self_attn.v_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.15.self_attn.q_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.15.self_attn.q_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.15.self_attn.out_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.15.self_attn.out_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.15.mlp.fc1.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.15.mlp.fc1.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.15.mlp.fc2.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.15.mlp.fc2.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.16.self_attn.k_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.16.self_attn.k_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.16.self_attn.v_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.16.self_attn.v_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.16.self_attn.q_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.16.self_attn.q_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.16.self_attn.out_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.16.self_attn.out_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.16.mlp.fc1.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.16.mlp.fc1.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.16.mlp.fc2.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.16.mlp.fc2.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.17.self_attn.k_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.17.self_attn.k_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.17.self_attn.v_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.17.self_attn.v_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.17.self_attn.q_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.17.self_attn.q_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.17.self_attn.out_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.17.self_attn.out_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.17.mlp.fc1.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.17.mlp.fc1.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.17.mlp.fc2.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.17.mlp.fc2.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.18.self_attn.k_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.18.self_attn.k_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.18.self_attn.v_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.18.self_attn.v_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.18.self_attn.q_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.18.self_attn.q_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.18.self_attn.out_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.18.self_attn.out_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.18.mlp.fc1.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.18.mlp.fc1.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.18.mlp.fc2.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.18.mlp.fc2.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.19.self_attn.k_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.19.self_attn.k_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.19.self_attn.v_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.19.self_attn.v_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.19.self_attn.q_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.19.self_attn.q_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.19.self_attn.out_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.19.self_attn.out_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.19.mlp.fc1.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.19.mlp.fc1.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.19.mlp.fc2.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.19.mlp.fc2.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.20.self_attn.k_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.20.self_attn.k_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.20.self_attn.v_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.20.self_attn.v_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.20.self_attn.q_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.20.self_attn.q_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.20.self_attn.out_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.20.self_attn.out_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.20.mlp.fc1.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.20.mlp.fc1.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.20.mlp.fc2.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.20.mlp.fc2.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.21.self_attn.k_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.21.self_attn.k_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.21.self_attn.v_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.21.self_attn.v_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.21.self_attn.q_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.21.self_attn.q_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.21.self_attn.out_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.21.self_attn.out_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.21.mlp.fc1.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.21.mlp.fc1.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.21.mlp.fc2.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.21.mlp.fc2.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.22.self_attn.k_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.22.self_attn.k_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.22.self_attn.v_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.22.self_attn.v_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.22.self_attn.q_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.22.self_attn.q_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.22.self_attn.out_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.22.self_attn.out_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.22.mlp.fc1.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.22.mlp.fc1.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.22.mlp.fc2.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.22.mlp.fc2.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.23.self_attn.k_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.23.self_attn.k_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.23.self_attn.v_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.23.self_attn.v_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.23.self_attn.q_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.23.self_attn.q_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.23.self_attn.out_proj.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.23.self_attn.out_proj.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.23.mlp.fc1.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.23.mlp.fc1.lora_B.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.23.mlp.fc2.lora_A.default.weight True
+base_model.model.gpt_neox.vision_tower.vision_model.encoder.layers.23.mlp.fc2.lora_B.default.weight True
+base_model.model.gpt_neox.mm_projector.0.weight True
+base_model.model.gpt_neox.mm_projector.0.bias True
+base_model.model.gpt_neox.mm_projector.2.weight True
+base_model.model.gpt_neox.mm_projector.2.bias True
+base_model.model.embed_out.norm_after_pool.weight True
+base_model.model.embed_out.norm_after_pool.bias True
+base_model.model.embed_out.combine.weight True
+base_model.model.embed_out.combine.bias True
+base_model.model.embed_out.mid_modules.0.blocks.0.block.0.weight True
+base_model.model.embed_out.mid_modules.0.blocks.0.block.0.bias True
+base_model.model.embed_out.mid_modules.0.blocks.0.block.1.weight True
+base_model.model.embed_out.mid_modules.0.blocks.0.block.1.bias True
+base_model.model.embed_out.mid_modules.0.blocks.1.block.0.weight True
+base_model.model.embed_out.mid_modules.0.blocks.1.block.0.bias True
+base_model.model.embed_out.mid_modules.0.blocks.1.block.1.weight True
+base_model.model.embed_out.mid_modules.0.blocks.1.block.1.bias True
+base_model.model.embed_out.mid_modules.0.cond_encoder.1.weight True
+base_model.model.embed_out.mid_modules.0.cond_encoder.1.bias True
+base_model.model.embed_out.mid_modules.1.blocks.0.block.0.weight True
+base_model.model.embed_out.mid_modules.1.blocks.0.block.0.bias True
+base_model.model.embed_out.mid_modules.1.blocks.0.block.1.weight True
+base_model.model.embed_out.mid_modules.1.blocks.0.block.1.bias True
+base_model.model.embed_out.mid_modules.1.blocks.1.block.0.weight True
+base_model.model.embed_out.mid_modules.1.blocks.1.block.0.bias True
+base_model.model.embed_out.mid_modules.1.blocks.1.block.1.weight True
+base_model.model.embed_out.mid_modules.1.blocks.1.block.1.bias True
+base_model.model.embed_out.mid_modules.1.cond_encoder.1.weight True
+base_model.model.embed_out.mid_modules.1.cond_encoder.1.bias True
+base_model.model.embed_out.diffusion_step_encoder.1.weight True
+base_model.model.embed_out.diffusion_step_encoder.1.bias True
+base_model.model.embed_out.diffusion_step_encoder.3.weight True
+base_model.model.embed_out.diffusion_step_encoder.3.bias True
+base_model.model.embed_out.up_modules.0.0.blocks.0.block.0.weight True
+base_model.model.embed_out.up_modules.0.0.blocks.0.block.0.bias True
+base_model.model.embed_out.up_modules.0.0.blocks.0.block.1.weight True
+base_model.model.embed_out.up_modules.0.0.blocks.0.block.1.bias True
+base_model.model.embed_out.up_modules.0.0.blocks.1.block.0.weight True
+base_model.model.embed_out.up_modules.0.0.blocks.1.block.0.bias True
+base_model.model.embed_out.up_modules.0.0.blocks.1.block.1.weight True
+base_model.model.embed_out.up_modules.0.0.blocks.1.block.1.bias True
+base_model.model.embed_out.up_modules.0.0.cond_encoder.1.weight True
+base_model.model.embed_out.up_modules.0.0.cond_encoder.1.bias True
+base_model.model.embed_out.up_modules.0.0.residual_conv.weight True
+base_model.model.embed_out.up_modules.0.0.residual_conv.bias True
+base_model.model.embed_out.up_modules.0.1.blocks.0.block.0.weight True
+base_model.model.embed_out.up_modules.0.1.blocks.0.block.0.bias True
+base_model.model.embed_out.up_modules.0.1.blocks.0.block.1.weight True
+base_model.model.embed_out.up_modules.0.1.blocks.0.block.1.bias True
+base_model.model.embed_out.up_modules.0.1.blocks.1.block.0.weight True
+base_model.model.embed_out.up_modules.0.1.blocks.1.block.0.bias True
+base_model.model.embed_out.up_modules.0.1.blocks.1.block.1.weight True
+base_model.model.embed_out.up_modules.0.1.blocks.1.block.1.bias True
+base_model.model.embed_out.up_modules.0.1.cond_encoder.1.weight True
+base_model.model.embed_out.up_modules.0.1.cond_encoder.1.bias True
+base_model.model.embed_out.up_modules.0.2.conv.weight True
+base_model.model.embed_out.up_modules.0.2.conv.bias True
+base_model.model.embed_out.up_modules.1.0.blocks.0.block.0.weight True
+base_model.model.embed_out.up_modules.1.0.blocks.0.block.0.bias True
+base_model.model.embed_out.up_modules.1.0.blocks.0.block.1.weight True
+base_model.model.embed_out.up_modules.1.0.blocks.0.block.1.bias True
+base_model.model.embed_out.up_modules.1.0.blocks.1.block.0.weight True
+base_model.model.embed_out.up_modules.1.0.blocks.1.block.0.bias True
+base_model.model.embed_out.up_modules.1.0.blocks.1.block.1.weight True
+base_model.model.embed_out.up_modules.1.0.blocks.1.block.1.bias True
+base_model.model.embed_out.up_modules.1.0.cond_encoder.1.weight True
+base_model.model.embed_out.up_modules.1.0.cond_encoder.1.bias True
+base_model.model.embed_out.up_modules.1.0.residual_conv.weight True
+base_model.model.embed_out.up_modules.1.0.residual_conv.bias True
+base_model.model.embed_out.up_modules.1.1.blocks.0.block.0.weight True
+base_model.model.embed_out.up_modules.1.1.blocks.0.block.0.bias True
+base_model.model.embed_out.up_modules.1.1.blocks.0.block.1.weight True
+base_model.model.embed_out.up_modules.1.1.blocks.0.block.1.bias True
+base_model.model.embed_out.up_modules.1.1.blocks.1.block.0.weight True
+base_model.model.embed_out.up_modules.1.1.blocks.1.block.0.bias True
+base_model.model.embed_out.up_modules.1.1.blocks.1.block.1.weight True
+base_model.model.embed_out.up_modules.1.1.blocks.1.block.1.bias True
+base_model.model.embed_out.up_modules.1.1.cond_encoder.1.weight True
+base_model.model.embed_out.up_modules.1.1.cond_encoder.1.bias True
+base_model.model.embed_out.up_modules.1.2.conv.weight True
+base_model.model.embed_out.up_modules.1.2.conv.bias True
+base_model.model.embed_out.down_modules.0.0.blocks.0.block.0.weight True
+base_model.model.embed_out.down_modules.0.0.blocks.0.block.0.bias True
+base_model.model.embed_out.down_modules.0.0.blocks.0.block.1.weight True
+base_model.model.embed_out.down_modules.0.0.blocks.0.block.1.bias True
+base_model.model.embed_out.down_modules.0.0.blocks.1.block.0.weight True
+base_model.model.embed_out.down_modules.0.0.blocks.1.block.0.bias True
+base_model.model.embed_out.down_modules.0.0.blocks.1.block.1.weight True
+base_model.model.embed_out.down_modules.0.0.blocks.1.block.1.bias True
+base_model.model.embed_out.down_modules.0.0.cond_encoder.1.weight True
+base_model.model.embed_out.down_modules.0.0.cond_encoder.1.bias True
+base_model.model.embed_out.down_modules.0.0.residual_conv.weight True
+base_model.model.embed_out.down_modules.0.0.residual_conv.bias True
+base_model.model.embed_out.down_modules.0.1.blocks.0.block.0.weight True
+base_model.model.embed_out.down_modules.0.1.blocks.0.block.0.bias True
+base_model.model.embed_out.down_modules.0.1.blocks.0.block.1.weight True
+base_model.model.embed_out.down_modules.0.1.blocks.0.block.1.bias True
+base_model.model.embed_out.down_modules.0.1.blocks.1.block.0.weight True
+base_model.model.embed_out.down_modules.0.1.blocks.1.block.0.bias True
+base_model.model.embed_out.down_modules.0.1.blocks.1.block.1.weight True
+base_model.model.embed_out.down_modules.0.1.blocks.1.block.1.bias True
+base_model.model.embed_out.down_modules.0.1.cond_encoder.1.weight True
+base_model.model.embed_out.down_modules.0.1.cond_encoder.1.bias True
+base_model.model.embed_out.down_modules.0.2.conv.weight True
+base_model.model.embed_out.down_modules.0.2.conv.bias True
+base_model.model.embed_out.down_modules.1.0.blocks.0.block.0.weight True
+base_model.model.embed_out.down_modules.1.0.blocks.0.block.0.bias True
+base_model.model.embed_out.down_modules.1.0.blocks.0.block.1.weight True
+base_model.model.embed_out.down_modules.1.0.blocks.0.block.1.bias True
+base_model.model.embed_out.down_modules.1.0.blocks.1.block.0.weight True
+base_model.model.embed_out.down_modules.1.0.blocks.1.block.0.bias True
+base_model.model.embed_out.down_modules.1.0.blocks.1.block.1.weight True
+base_model.model.embed_out.down_modules.1.0.blocks.1.block.1.bias True
+base_model.model.embed_out.down_modules.1.0.cond_encoder.1.weight True
+base_model.model.embed_out.down_modules.1.0.cond_encoder.1.bias True
+base_model.model.embed_out.down_modules.1.0.residual_conv.weight True
+base_model.model.embed_out.down_modules.1.0.residual_conv.bias True
+base_model.model.embed_out.down_modules.1.1.blocks.0.block.0.weight True
+base_model.model.embed_out.down_modules.1.1.blocks.0.block.0.bias True
+base_model.model.embed_out.down_modules.1.1.blocks.0.block.1.weight True
+base_model.model.embed_out.down_modules.1.1.blocks.0.block.1.bias True
+base_model.model.embed_out.down_modules.1.1.blocks.1.block.0.weight True
+base_model.model.embed_out.down_modules.1.1.blocks.1.block.0.bias True
+base_model.model.embed_out.down_modules.1.1.blocks.1.block.1.weight True
+base_model.model.embed_out.down_modules.1.1.blocks.1.block.1.bias True
+base_model.model.embed_out.down_modules.1.1.cond_encoder.1.weight True
+base_model.model.embed_out.down_modules.1.1.cond_encoder.1.bias True
+base_model.model.embed_out.down_modules.1.2.conv.weight True
+base_model.model.embed_out.down_modules.1.2.conv.bias True
+base_model.model.embed_out.down_modules.2.0.blocks.0.block.0.weight True
+base_model.model.embed_out.down_modules.2.0.blocks.0.block.0.bias True
+base_model.model.embed_out.down_modules.2.0.blocks.0.block.1.weight True
+base_model.model.embed_out.down_modules.2.0.blocks.0.block.1.bias True
+base_model.model.embed_out.down_modules.2.0.blocks.1.block.0.weight True
+base_model.model.embed_out.down_modules.2.0.blocks.1.block.0.bias True
+base_model.model.embed_out.down_modules.2.0.blocks.1.block.1.weight True
+base_model.model.embed_out.down_modules.2.0.blocks.1.block.1.bias True
+base_model.model.embed_out.down_modules.2.0.cond_encoder.1.weight True
+base_model.model.embed_out.down_modules.2.0.cond_encoder.1.bias True
+base_model.model.embed_out.down_modules.2.0.residual_conv.weight True
+base_model.model.embed_out.down_modules.2.0.residual_conv.bias True
+base_model.model.embed_out.down_modules.2.1.blocks.0.block.0.weight True
+base_model.model.embed_out.down_modules.2.1.blocks.0.block.0.bias True
+base_model.model.embed_out.down_modules.2.1.blocks.0.block.1.weight True
+base_model.model.embed_out.down_modules.2.1.blocks.0.block.1.bias True
+base_model.model.embed_out.down_modules.2.1.blocks.1.block.0.weight True
+base_model.model.embed_out.down_modules.2.1.blocks.1.block.0.bias True
+base_model.model.embed_out.down_modules.2.1.blocks.1.block.1.weight True
+base_model.model.embed_out.down_modules.2.1.blocks.1.block.1.bias True
+base_model.model.embed_out.down_modules.2.1.cond_encoder.1.weight True
+base_model.model.embed_out.down_modules.2.1.cond_encoder.1.bias True
+base_model.model.embed_out.final_conv.0.block.0.weight True
+base_model.model.embed_out.final_conv.0.block.0.bias True
+base_model.model.embed_out.final_conv.0.block.1.weight True
+base_model.model.embed_out.final_conv.0.block.1.bias True
+base_model.model.embed_out.final_conv.1.weight True
+base_model.model.embed_out.final_conv.1.bias True
+Found 0 hdf5 files
+Found 0 hdf5 files
+Traceback (most recent call last):
+  File "/l/users/malak.mansour/ICL/TinyVLA/./train_tinyvla.py", line 307, in <module>
+    main(config=config, llava_pythia_config=llava_pythia_config)
+  File "/l/users/malak.mansour/ICL/TinyVLA/./train_tinyvla.py", line 278, in main
+    train_dataset, val_dataset, stats, sampler_params = load_data(dataset_dir, name_filter, camera_names, config['training_args'].per_device_train_batch_size,
+  File "/l/users/malak.mansour/ICL/TinyVLA/data_utils/datasets.py", line 906, in load_data
+    norm_stats, _ = get_norm_stats(flatten_list([find_all_hdf5(s, skip_mirrored_data) for s in stats_dir_l]))
+  File "/l/users/malak.mansour/ICL/TinyVLA/data_utils/datasets.py", line 690, in get_norm_stats
+    all_qpos_data = torch.cat(all_qpos_data, dim=0)
+RuntimeError: torch.cat(): expected a non-empty list of Tensors
+[2025-07-24 14:25:55,972] [INFO] [launch.py:315:sigkill_handler] Killing subprocess 1674465
+[2025-07-24 14:25:55,973] [ERROR] [launch.py:321:sigkill_handler] ['/l/users/malak.mansour/anaconda3/envs/tinyvla/bin/python3.10', '-u', './train_tinyvla.py', '--local_rank=0', '--deepspeed', '/l/users/malak.mansour/ICL/TinyVLA/llava-pythia/scripts/zero2.json', '--lora_enable', 'True', '--lora_module', 'vit llm', '--load_pretrain', 'False', '--pretrain_image_size', '320', '--lora_r', '64', '--lora_alpha', '256', '--non_lora_lr', '2e-5', '--task_name', 'libero', '--model_name_or_path', 'lesjie/Llava-Pythia-400M', '--version', 'v0', '--tune_mm_mlp_adapter', 'True', '--freeze_vision_tower', 'True', '--freeze_backbone', 'True', '--mm_use_im_start_end', 'False', '--mm_use_im_patch_token', 'False', '--image_aspect_ratio', 'pad', '--group_by_modality_length', 'False', '--bf16', 'False', '--output_dir', '/l/users/malak.mansour/Datasets/TinyVLA', '--max_steps', '10000', '--per_device_train_batch_size', '32', '--gradient_accumulation_steps', '1', '--save_strategy', 'steps', '--save_steps', '1000', '--save_total_limit', '50', '--learning_rate', '2e-4', '--weight_decay', '0.', '--warmup_ratio', '0.005', '--lr_scheduler_type', 'cosine', '--logging_steps', '10', '--tf32', 'False', '--model_max_length', '2048', '--gradient_checkpointing', 'True', '--dataloader_num_workers', '8', '--lazy_preprocess', 'True', '--action_head_type', 'droid_diffusion', '--use_state', 'True', '--concat', 'token_cat', '--window_size', '6', '--report_to', 'none', '--use_cot', 'True', '--logging_dir', '/l/users/malak.mansour/Datasets/TinyVLA/log'] exits with return code = 1

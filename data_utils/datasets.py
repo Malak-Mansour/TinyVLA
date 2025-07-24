@@ -202,6 +202,9 @@ class EpisodicDataset(torch.utils.data.Dataset):
     #     assert raw_lang is not None, ""
     #     return self.llava_pythia_process.forward_process(sample)
     #     # print(image_data.dtype, qpos_data.dtype, action_data.dtype, is_pad.dtype)
+
+    # to work with do_manual
+    '''
     def __getitem__(self, index):
         (dataset_path, ep_name), start_ts = self._locate_transition(index)
 
@@ -292,6 +295,117 @@ class EpisodicDataset(torch.utils.data.Dataset):
 
         # if self.use_cot and index < 3:
         #     print(f"[CoT] raw_lang (index={index}):\n{raw_lang}\n")
+
+        return self.llava_pythia_process.forward_process(sample)
+    '''
+
+    # to work with libero
+    '''
+    of this format:
+    demo_1539/
+    actions (T, 7)
+    dones (T,)
+
+    obs/
+        image (T, 224, 224, 3)
+        joint_state (T, 7) 
+        seg (T, 224, 224, 1)
+        state (T, 8) 
+        wrist_image (T, 224, 224, 3)
+    rewards (T,)
+    '''
+    def __getitem__(self, index):
+        (dataset_path, ep_name), start_ts = self._locate_transition(index)
+
+        with h5py.File(dataset_path, 'r') as root:
+            ep_group = root[ep_name]
+            obs = ep_group["obs"]
+
+            # qpos: use joint_state directly
+            qpos = obs["joint_state"][()]  # (T, 7)
+
+            # Load image(s)
+            image_dict = {}
+            for cam_name in self.camera_names:  # e.g., ["image", "wrist_image"]
+                img = obs[cam_name][start_ts]
+                if self.imsize != img.shape[1]:
+                    img = cv2.resize(img, (320, 180))
+                image_dict[cam_name] = img
+
+            # Use 'actions', not 'teleop_actions'
+            action = ep_group["actions"][()]
+            original_action_shape = action.shape
+            episode_len = original_action_shape[0]
+
+            action = action[max(0, start_ts - 1):]
+            action_len = episode_len - max(0, start_ts - 1)
+
+            # Language: infer from folder name
+            file_name = os.path.basename(os.path.dirname(dataset_path))
+            raw_lang = file_name.replace("_", " ")
+            if self.use_cot:
+                raw_lang += "\nLet's think step by step."
+
+        # Padding
+        padded_action = np.zeros((self.max_episode_len, original_action_shape[1]), dtype=np.float32)
+        padded_action[:action_len] = action
+        is_pad = np.zeros(self.max_episode_len)
+        is_pad[action_len:] = 1
+
+        padded_action = padded_action[:self.chunk_size]
+        is_pad = is_pad[:self.chunk_size]
+
+        all_cam_images = [image_dict[cam_name] for cam_name in self.camera_names]
+        all_cam_images = np.stack(all_cam_images, axis=0)
+        image_data = torch.from_numpy(all_cam_images)
+        qpos_data = torch.from_numpy(qpos).float()
+        action_data = torch.from_numpy(padded_action).float()
+        is_pad = torch.from_numpy(is_pad).bool()
+
+        if 'top' in self.camera_names:
+            image_data = torch.stack(
+                [torch.from_numpy(cv2.cvtColor(img.numpy(), cv2.COLOR_BGR2RGB)) for img in image_data], dim=0)
+
+        image_data = torch.einsum('k h w c -> k c h w', image_data)
+
+        if self.transformations is None:
+            print('Initializing transformations')
+            original_size = image_data.shape[2:]
+            ratio = 0.95
+            self.transformations = [
+                transforms.RandomCrop(size=[int(original_size[0] * ratio), int(original_size[1] * ratio)]),
+                transforms.Resize(original_size, antialias=True),
+                transforms.RandomRotation(degrees=[-5.0, 5.0], expand=False),
+                transforms.ColorJitter(brightness=0.3, contrast=0.4, saturation=0.5)
+            ]
+
+        if self.augment_images:
+            for transform in self.transformations:
+                image_data = transform(image_data)
+
+        image_data = image_data / 255.0
+
+        if 'diffusion' in self.policy_class:
+            action_data = ((action_data - self.norm_stats["action_min"]) /
+                        (self.norm_stats["action_max"] - self.norm_stats["action_min"])) * 2 - 1
+        else:
+            action_data = (action_data - self.norm_stats["action_mean"]) / self.norm_stats["action_std"]
+
+        qpos_data = (qpos_data - self.norm_stats["qpos_mean"]) / self.norm_stats["qpos_std"]
+
+        if self.policy_class == 'ACT':
+            return image_data, qpos_data, action_data, is_pad
+
+        sample = {
+            'image': image_data,
+            'state': qpos_data,
+            'action': action_data,
+            'is_pad': is_pad,
+            'raw_lang': raw_lang
+        }
+
+        if self.use_cot and index < 3:
+            print(f"[CoT] raw_lang (index={index}):\n{raw_lang}\n")
 
         return self.llava_pythia_process.forward_process(sample)
 
@@ -473,6 +587,9 @@ class LlavaPythiaProcess:
 #              "example_qpos": qpos}
 
 #     return stats, all_episode_len
+
+# to work with do_manual
+'''
 def get_norm_stats(dataset_path_list):
     """
     Computes normalization statistics for teleop_actions and joint_positions from episodic HDF5 datasets.
@@ -532,6 +649,74 @@ def get_norm_stats(dataset_path_list):
     }
 
     return stats, all_episode_len
+'''
+
+# to work with libero
+import torch
+import h5py
+
+def get_norm_stats(dataset_path_list):
+    """
+    Computes normalization statistics for 'actions' and 'joint_state' from Libero-style episodic HDF5 datasets.
+    """
+    all_qpos_data = []
+    all_action_data = []
+    all_episode_len = []
+
+    for dataset_path in dataset_path_list:
+        try:
+            with h5py.File(dataset_path, 'r') as root:
+                for ep_name in root:
+                    if not ep_name.startswith("demo_"):
+                        continue
+
+                    ep_group = root[ep_name]
+                    obs = ep_group["obs"]
+
+                    # qpos = joint_state (T, 7)
+                    qpos = obs["joint_state"][()]  # shape (T, 7)
+                    action = ep_group["actions"][()]  # shape (T, 7)
+
+                    if len(qpos) != len(action):
+                        print(f"⚠️ Skipping {ep_name}: qpos/action length mismatch")
+                        continue
+
+                    all_qpos_data.append(torch.from_numpy(qpos))
+                    all_action_data.append(torch.from_numpy(action))
+                    all_episode_len.append(len(qpos))
+
+        except Exception as e:
+            print(f'❌ Error loading {dataset_path} in get_norm_stats')
+            print(e)
+            quit()
+
+    all_qpos_data = torch.cat(all_qpos_data, dim=0)
+    all_action_data = torch.cat(all_action_data, dim=0)
+
+    # Normalize action data
+    action_mean = all_action_data.mean(dim=0).float()
+    action_std = all_action_data.std(dim=0).float().clamp(min=1e-2)
+
+    # Normalize qpos data
+    qpos_mean = all_qpos_data.mean(dim=0).float()
+    qpos_std = all_qpos_data.std(dim=0).float().clamp(min=1e-2)
+
+    action_min = all_action_data.min(dim=0).values.float()
+    action_max = all_action_data.max(dim=0).values.float()
+
+    eps = 0.0001
+    stats = {
+        "action_mean": action_mean.numpy(),
+        "action_std": action_std.numpy(),
+        "action_min": (action_min - eps).numpy(),
+        "action_max": (action_max + eps).numpy(),
+        "qpos_mean": qpos_mean.numpy(),
+        "qpos_std": qpos_std.numpy(),
+        "example_qpos": all_qpos_data[0].numpy()
+    }
+
+    return stats, all_episode_len
+
 
 def find_all_hdf5(dataset_dir, skip_mirrored_data):
     hdf5_files = []
@@ -625,6 +810,9 @@ def BatchSampler(batch_size, episode_len_l, sample_weights):
 
 #     if return_dataset:
 #         return train_dataset, val_dataset, norm_stats, sampler_params
+
+# to work with do_manual
+''' 
 def load_data(dataset_dir, name_filter, camera_names, batch_size_train, batch_size_val, chunk_size, config,
               skip_mirrored_data=False, policy_class=None, stats_dir_l=None, sample_weights=None,
               train_ratio=0.99, return_dataset=False, llava_pythia_process=None
@@ -681,6 +869,93 @@ def load_data(dataset_dir, name_filter, camera_names, batch_size_train, batch_si
     sampler_params = {
         'train': {"batch_size": batch_size_train, 'episode_len_l': [train_episode_len], 'sample_weights': sample_weights},
         'eval': {"batch_size": batch_size_val, 'episode_len_l': [val_episode_len], 'sample_weights': None}
+    }
+
+    if return_dataset:
+        return train_dataset, val_dataset, norm_stats, sampler_params
+'''
+
+# to work with libero
+def load_data(dataset_dir, name_filter, camera_names, batch_size_train, batch_size_val, chunk_size, config,
+              skip_mirrored_data=False, policy_class=None, stats_dir_l=None, sample_weights=None,
+              train_ratio=0.99, return_dataset=False, llava_pythia_process=None, use_cot=False):
+    
+    
+    dataset_path_list = find_all_hdf5(dataset_dir, skip_mirrored_data)
+    dataset_path_list = [n for n in dataset_path_list if name_filter(n)]
+
+    # Extract (file_path, ep_name) tuples and episode lengths
+    episode_ids = []
+    episode_len_list = []
+    for file_path in dataset_path_list:
+        with h5py.File(file_path, 'r') as f:
+            for ep_name in f:
+                if ep_name.startswith("demo_"):
+                    episode_ids.append((file_path, ep_name))
+                    ep_len = len(f[ep_name]['actions'])
+                    episode_len_list.append(ep_len)
+
+    num_episodes = len(episode_ids)
+    shuffled_idx = np.random.permutation(num_episodes)
+    split = int(train_ratio * num_episodes)
+    train_idx = shuffled_idx[:split]
+    val_idx = shuffled_idx[split:]
+
+    train_episode_ids = [episode_ids[i] for i in train_idx]
+    val_episode_ids = [episode_ids[i] for i in val_idx]
+    train_episode_len = [episode_len_list[i] for i in train_idx]
+    val_episode_len = [episode_len_list[i] for i in val_idx]
+
+    # Normalize using all stats unless explicitly limited
+    if stats_dir_l is None:
+        stats_dir_l = [dataset_dir]
+    elif isinstance(stats_dir_l, str):
+        stats_dir_l = [stats_dir_l]
+
+    # Compute normalization stats from Libero-format qpos/actions
+    norm_stats, _ = get_norm_stats(flatten_list([find_all_hdf5(s, skip_mirrored_data) for s in stats_dir_l]))
+
+    print(f"Found {len(dataset_path_list)} hdf5 files")
+    print(f"Norm stats from: {stats_dir_l}")
+    print(f"train_episode_len_l: [{train_episode_len}]")
+
+    train_dataset = EpisodicDataset(
+        dataset_path_list,
+        camera_names,
+        norm_stats,
+        train_episode_ids,
+        train_episode_len,
+        chunk_size,
+        policy_class,
+        llava_pythia_process=llava_pythia_process,
+        imsize=config['training_args'].pretrain_image_size,
+        use_cot=use_cot
+    )
+
+    val_dataset = EpisodicDataset(
+        dataset_path_list,
+        camera_names,
+        norm_stats,
+        val_episode_ids,
+        val_episode_len,
+        chunk_size,
+        policy_class,
+        llava_pythia_process=llava_pythia_process,
+        imsize=config['training_args'].pretrain_image_size,
+        use_cot=use_cot
+    )
+
+    sampler_params = {
+        'train': {
+            "batch_size": batch_size_train,
+            'episode_len_l': [train_episode_len],
+            'sample_weights': sample_weights
+        },
+        'eval': {
+            "batch_size": batch_size_val,
+            'episode_len_l': [val_episode_len],
+            'sample_weights': None
+        }
     }
 
     if return_dataset:

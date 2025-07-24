@@ -20,6 +20,11 @@ TASK_CONFIGS = {
         'dataset_dir': '/l/users/malak.mansour/Datasets/do_manual/hdf5', # define the path of the dataset
         'episode_len': 125, #max length of the episode,
         'camera_names': ['agentview_rgb', 'eye_in_hand_rgb'] # define the camera names which are used as the key when reading data
+    }, 
+    'libero':{
+        'dataset_dir': '/l/users/malak.mansour/Datasets/libero_lm_90_download/hdf5_from_rlds/libero_lm_90_split',
+        'episode_len': 360, #max length of the episode,
+        'camera_names': ['image', 'wrist_image'] # define the camera names which are used as the key when reading data
     }
 }
 ####################################################################################
