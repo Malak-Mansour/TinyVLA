@@ -1,17 +1,16 @@
 #!/bin/bash
 
-#!/bin/bash
 #SBATCH --job-name=train_tinyvla_ECoT_libero
 #SBATCH --output=logs/debug_%j.out
 #SBATCH --error=logs/debug_%j.err
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
-#SBATCH --mem=124G
+#SBATCH --mem=64G
 #SBATCH --gres=gpu:1
 #SBATCH --partition=cscc-gpu-p
 #SBATCH --qos=cscc-gpu-qos
 #SBATCH --time=12:00:00
-#SBATCH --exclude=gpu-49,gpu-05
+#SBATCH --exclude=gpu-05
 
 
 # demo_1539/  

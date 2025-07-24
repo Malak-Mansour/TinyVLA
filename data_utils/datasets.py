@@ -24,7 +24,7 @@ class EpisodicDataset(torch.utils.data.Dataset):
     to ensure consistent episode lengths.
     """
     def __init__(self, dataset_path_list, camera_names, norm_stats, episode_ids, episode_len, chunk_size, policy_class, llava_pythia_process=None, imsize=480
-                #  , use_cot=False
+                 , use_cot=False
                  ):
         """
         Initializes the EpisodicDataset class with the given parameters.
@@ -59,7 +59,7 @@ class EpisodicDataset(torch.utils.data.Dataset):
         self.policy_class = policy_class
         self.llava_pythia_process = llava_pythia_process
         self.imsize = imsize
-        # self.use_cot = use_cot
+        self.use_cot = use_cot
         if self.imsize == 320:
             print("########################Current Image Size is [180,320]; maybe due to the pretrain data image size###################################")
         if 'diffusion' in self.policy_class:
@@ -520,11 +520,11 @@ class LlavaPythiaProcess:
     
     
         # Chain-of-thought mode
-        # if getattr(self.data_args, "use_cot", False):
-        #     sources["conversations"][0]["value"] += sample['raw_lang'] + "\nLet's think step-by-step."
-        # else:
-        #     sources["conversations"][0]["value"] += sample['raw_lang']
-        sources["conversations"][0]["value"] += sample['raw_lang']
+        if getattr(self.data_args, "use_cot", False):
+            sources["conversations"][0]["value"] += sample['raw_lang'] + "\nLet's think step-by-step."
+        else:
+            sources["conversations"][0]["value"] += sample['raw_lang']
+        # sources["conversations"][0]["value"] += sample['raw_lang']
 
 
         # print(sample['obs']['raw_language'].decode('utf-8'))
