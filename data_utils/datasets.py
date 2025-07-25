@@ -318,7 +318,7 @@ class EpisodicDataset(torch.utils.data.Dataset):
         (dataset_path, ep_name), start_ts = self._locate_transition(index)
 
         with h5py.File(dataset_path, 'r') as root:
-            ep_group = root[ep_name]
+            ep_group = root if ep_name is None else root[ep_name]
             obs = ep_group["obs"]
 
             # qpos: use joint_state directly
@@ -340,6 +340,8 @@ class EpisodicDataset(torch.utils.data.Dataset):
             action = action[max(0, start_ts - 1):]
             action_len = episode_len - max(0, start_ts - 1)
 
+
+
             # Language: infer from folder name
             # file_name = os.path.basename(os.path.dirname(dataset_path))
             # raw_lang = file_name.replace("_", " ")
@@ -348,6 +350,8 @@ class EpisodicDataset(torch.utils.data.Dataset):
             raw_lang = ep_group.attrs.get("language", "")
             if isinstance(raw_lang, bytes):
                 raw_lang = raw_lang.decode("utf-8")
+
+
 
             if self.use_cot:
                 raw_lang += "\nLet's think step by step."
@@ -658,52 +662,50 @@ def get_norm_stats(dataset_path_list):
 '''
 
 # to work with libero
-import torch
-import h5py
-
 def get_norm_stats(dataset_path_list):
-    """
-    Computes normalization statistics for 'actions' and 'joint_state' from Libero-style episodic HDF5 datasets.
-    """
     all_qpos_data = []
     all_action_data = []
     all_episode_len = []
 
     for dataset_path in dataset_path_list:
         try:
-            with h5py.File(dataset_path, 'r') as root:
-                for ep_name in root:
-                    if not ep_name.startswith("demo_"):
-                        continue
+            with h5py.File(dataset_path, 'r') as f:
+                if "obs" not in f or "actions" not in f:
+                    print(f"⚠️ Skipping {dataset_path}: Missing obs/actions group")
+                    continue
 
-                    ep_group = root[ep_name]
-                    obs = ep_group["obs"]
+                obs = f["obs"]
 
-                    # qpos = joint_state (T, 7)
-                    qpos = obs["joint_state"][()]  # shape (T, 7)
-                    action = ep_group["actions"][()]  # shape (T, 7)
+                if "joint_state" not in obs:
+                    print(f"⚠️ Skipping {dataset_path}: Missing joint_state in obs")
+                    continue
 
-                    if len(qpos) != len(action):
-                        print(f"⚠️ Skipping {ep_name}: qpos/action length mismatch")
-                        continue
+                qpos = obs["joint_state"][()]
+                action = f["actions"][()]
 
-                    all_qpos_data.append(torch.from_numpy(qpos))
-                    all_action_data.append(torch.from_numpy(action))
-                    all_episode_len.append(len(qpos))
+                if len(qpos) != len(action):
+                    print(f"⚠️ Skipping {dataset_path}: qpos/action length mismatch")
+                    continue
+
+                all_qpos_data.append(torch.from_numpy(qpos))
+                all_action_data.append(torch.from_numpy(action))
+                all_episode_len.append(len(qpos))
+
+                # print(f"✅ Loaded: {dataset_path}, length = {len(qpos)}")
 
         except Exception as e:
-            print(f'❌ Error loading {dataset_path} in get_norm_stats')
-            print(e)
-            quit()
+            print(f"❌ Error loading {dataset_path}: {e}")
+            continue
+
+    if not all_qpos_data:
+        raise RuntimeError("❌ No valid episodes found. Check HDF5 structure.")
 
     all_qpos_data = torch.cat(all_qpos_data, dim=0)
     all_action_data = torch.cat(all_action_data, dim=0)
 
-    # Normalize action data
     action_mean = all_action_data.mean(dim=0).float()
     action_std = all_action_data.std(dim=0).float().clamp(min=1e-2)
 
-    # Normalize qpos data
     qpos_mean = all_qpos_data.mean(dim=0).float()
     qpos_std = all_qpos_data.std(dim=0).float().clamp(min=1e-2)
 
@@ -895,11 +897,12 @@ def load_data(dataset_dir, name_filter, camera_names, batch_size_train, batch_si
     episode_len_list = []
     for file_path in dataset_path_list:
         with h5py.File(file_path, 'r') as f:
-            for ep_name in f:
-                if ep_name.startswith("demo_"):
-                    episode_ids.append((file_path, ep_name))
-                    ep_len = len(f[ep_name]['actions'])
-                    episode_len_list.append(ep_len)
+            if "actions" in f and "obs" in f and "joint_state" in f["obs"]:
+                episode_ids.append((file_path, None))  # None = no inner group
+                ep_len = len(f["actions"])
+                episode_len_list.append(ep_len)
+            else:
+                print(f"⚠️ Skipping {file_path}: missing required keys")
 
     num_episodes = len(episode_ids)
     shuffled_idx = np.random.permutation(num_episodes)

@@ -5,7 +5,7 @@
 #SBATCH --error=logs/debug_%j.err
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
-#SBATCH --mem=64G
+#SBATCH --mem=24G
 #SBATCH --gres=gpu:1
 #SBATCH --partition=cscc-gpu-p
 #SBATCH --qos=cscc-gpu-qos
@@ -78,7 +78,7 @@ deepspeed --master_port 29600 --num_gpus=1 --num_nodes=1 ./train_tinyvla.py \
   --bf16 False \
   --output_dir $OUTPUT \
   --max_steps 10000 \
-  --per_device_train_batch_size 32 \
+  --per_device_train_batch_size 4 \
   --gradient_accumulation_steps 1 \
   --save_strategy "steps" \
   --save_steps 1000 \

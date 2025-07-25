@@ -22,7 +22,7 @@ TASK_CONFIGS = {
         'camera_names': ['agentview_rgb', 'eye_in_hand_rgb'] # define the camera names which are used as the key when reading data
     }, 
     'libero':{
-        'dataset_dir': '/l/users/malak.mansour/Datasets/libero_lm_90_download/hdf5_from_rlds/libero_lm_90_split',
+        'dataset_dir': '/l/users/malak.mansour/Datasets/libero_lm_90_download/split_episodes',
         'episode_len': 360, #max length of the episode,
         'camera_names': ['image', 'wrist_image'] # define the camera names which are used as the key when reading data
     }
