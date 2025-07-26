@@ -1,3 +1,4 @@
+from operator import index
 import numpy as np
 import torch
 import os
@@ -73,6 +74,11 @@ class EpisodicDataset(torch.utils.data.Dataset):
         #     print("There are three views: left, right, top")
         # is_sim indicates whether the data comes from a simulation environment.
         self.is_sim = False
+        print("Sample episode_ids (first 5):", self.episode_ids[:5])
+        print("Sample episode_len (first 5):", self.episode_len[:5])
+        print("Sample cumulative_len:", self.cumulative_len[:5])
+        print("Total transitions:", self.cumulative_len[-1])
+
 
     def __len__(self):
         return sum(self.episode_len)
@@ -415,7 +421,12 @@ class EpisodicDataset(torch.utils.data.Dataset):
         }
 
         if self.use_cot and index < 3:
-            print(f"[CoT] raw_lang (index={index}):\n{raw_lang}\n")
+            print(f"[CoT] raw_lang (index={index}), dataset_path={dataset_path}:\n{raw_lang}\n")
+
+        # for i in [0, 1000, 5000, 10000]:  # different transition indices
+        #     print(f"[CoT] raw_lang (index={i}): {dataset._get_instruction(i)}")
+
+        # print(f"[DEBUG] index={index}, dataset_path={dataset_path}, ep_name={ep_name}, start_ts={start_ts}")
 
         return self.llava_pythia_process.forward_process(sample)
 
@@ -926,7 +937,7 @@ def load_data(dataset_dir, name_filter, camera_names, batch_size_train, batch_si
 
     print(f"Found {len(dataset_path_list)} hdf5 files")
     print(f"Norm stats from: {stats_dir_l}")
-    print(f"train_episode_len_l: [{train_episode_len}]")
+    print(f"train_episode_len_l: {train_episode_len}")
 
     train_dataset = EpisodicDataset(
         dataset_path_list,
@@ -957,12 +968,14 @@ def load_data(dataset_dir, name_filter, camera_names, batch_size_train, batch_si
     sampler_params = {
         'train': {
             "batch_size": batch_size_train,
-            'episode_len_l': [train_episode_len],
+            # 'episode_len_l': [train_episode_len],
+            'episode_len_l': train_episode_len,
             'sample_weights': sample_weights
         },
         'eval': {
             "batch_size": batch_size_val,
-            'episode_len_l': [val_episode_len],
+            # 'episode_len_l': [val_episode_len],
+            'episode_len_l': val_episode_len,
             'sample_weights': None
         }
     }

@@ -1,4 +1,16 @@
 #!/bin/bash
+#SBATCH --job-name=train_tinyvla_ECoT_libero
+#SBATCH --output=logs_process_chkpts/debug_%j.out
+#SBATCH --error=logs_process_chkpts/debug_%j.err
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=24G
+#SBATCH --gres=gpu:1
+#SBATCH --partition=cscc-gpu-p
+#SBATCH --qos=cscc-gpu-qos
+#SBATCH --time=12:00:00
+#SBATCH --exclude=gpu-05
+
 # This scripts is used to process the trained weights and generates a smaller and compact weights
 LLM_MODEL_SIZE=410M
 

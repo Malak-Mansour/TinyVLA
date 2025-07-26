@@ -173,20 +173,47 @@ DEFAULT_VISUAL_CONFIG = {
 
 # print(DEFAULT_ACT_CONFIG['act'])
 
+# class LlavaPythiaConfig(GPTNeoXConfig):
+#     model_type = "llava_pythia"
+
+#     def __init__(self, vision_config=None, **kwargs):
+#         # self.use_cot = kwargs.pop("use_cot", False)
+        
+#         if vision_config is None:
+#             self.vision_config = DEFAULT_VISUAL_CONFIG
+#         else:
+#             self.vision_config = vision_config
+
+#         self.concat = "None"
+#         super().__init__(**kwargs)
+
 class LlavaPythiaConfig(GPTNeoXConfig):
     model_type = "llava_pythia"
 
-    def __init__(self, vision_config=None, **kwargs):
-        # self.use_cot = kwargs.pop("use_cot", False)
+    def __init__(
+        self,
+        vision_config=None,
+        projector_config=None,
+        action_head_type="none",     # ✅ REQUIRED
+        action_dim=None,             # ✅ REQUIRED
+        state_dim=None,              # ✅ REQUIRED
+        use_state=False,             # ✅ REQUIRED
+        concat="None",               # ✅ Add this too
+        **kwargs
+    ):
+        # Store visual config
+        self.vision_config = vision_config or DEFAULT_VISUAL_CONFIG
+        self.projector_config = projector_config or self.vision_config.get("mm_projector", {})
         
-        if vision_config is None:
-            self.vision_config = DEFAULT_VISUAL_CONFIG
-        else:
-            self.vision_config = vision_config
+        # Register custom fields
+        self.action_head_type = action_head_type
+        self.action_dim = action_dim
+        self.state_dim = state_dim
+        self.use_state = use_state
+        self.concat = concat
 
-        self.concat = "None"
+        # Call parent constructor with remaining kwargs
         super().__init__(**kwargs)
-
 
 if __name__ == "__main__":
     print(LlavaPythiaVisionConfig())

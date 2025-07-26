@@ -4,12 +4,9 @@ import shutil
 
 from transformers import AutoTokenizer, AutoModelForCausalLM, AutoConfig, BitsAndBytesConfig, CLIPImageProcessor, SiglipImageProcessor, \
     GPTNeoXModel, GPTNeoXPreTrainedModel
-from transformers.models.gpt_neox.tokenization_gpt_neox_fast import GPTNeoXTokenizerFast as GPTNeoXTokenizer
 import torch
 from llava_pythia.model import *
 from llava_pythia.constants import DEFAULT_IMAGE_PATCH_TOKEN, DEFAULT_IM_START_TOKEN, DEFAULT_IM_END_TOKEN
-from llava_pythia.model.language_model.pythia.llava_pythia import LlavaPythiaForCausalLM
-from llava_pythia.model.language_model.pythia.configuration_llava_pythia import LlavaPythiaConfig
 
 
 def load_pretrained_model(model_path, model_base, model_name, load_8bit=False, load_4bit=False, device_map="cuda", device="cuda"):
@@ -31,8 +28,7 @@ def load_pretrained_model(model_path, model_base, model_name, load_8bit=False, l
         - image_processor: The image processor if applicable.
         - context_len (int): The context length of the model.
     """
-    # kwargs = {"device_map": device_map}
-    kwargs = {"device_map": None}
+    kwargs = {"device_map": device_map}
     if load_8bit:
         kwargs['load_in_8bit'] = True
     elif load_4bit:
@@ -101,9 +97,8 @@ def load_pretrained_model(model_path, model_base, model_name, load_8bit=False, l
         elif model_base is not None:
             # this may be mm projector only
             print('Loading LLaVA-Pythia from base model...')
-            tokenizer = AutoTokenizer.from_pretrained(model_base, use_fast=True)
-            # cfg_pretrained = AutoConfig.from_pretrained(model_path)
-            cfg_pretrained = LlavaPythiaConfig.from_pretrained(model_path, trust_remote_code=True)  # ✅ Fix: load correct config
+            tokenizer = AutoTokenizer.from_pretrained(model_base, use_fast=False)
+            cfg_pretrained = AutoConfig.from_pretrained(model_path)
             model = LlavaPythiaForCausalLM.from_pretrained(model_base, low_cpu_mem_usage=True, config=cfg_pretrained, **kwargs)
 
             mm_projector_weights = torch.load(os.path.join(model_path, 'mm_projector.bin'), map_location='cpu')
@@ -112,8 +107,6 @@ def load_pretrained_model(model_path, model_base, model_name, load_8bit=False, l
         else:
             print("load llaVA-Pythia MLLM!!!")
             config = LlavaPythiaConfig.from_pretrained(model_path, trust_remote_code=True)
-            # if not hasattr(config, 'action_head_type'):
-            #     config.action_head_type = 'none'  # or "mlp" or "linear" depending on your setup
             tokenizer = AutoTokenizer.from_pretrained(model_path, use_fast=True)
             model = LlavaPythiaForCausalLM.from_pretrained(
                 model_path,
@@ -125,10 +118,8 @@ def load_pretrained_model(model_path, model_base, model_name, load_8bit=False, l
         if model_base is not None:
             # PEFT model
             from peft import PeftModel
-            tokenizer = AutoTokenizer.from_pretrained(model_base, use_fast=True)
-            # model = AutoModelForCausalLM.from_pretrained(model_base, torch_dtype=torch.float16, low_cpu_mem_usage=True, device_map="auto")
-            model = AutoModelForCausalLM.from_pretrained(model_base, low_cpu_mem_usage=True, **kwargs)
-            # model = LlavaPythiaForCausalLM.from_pretrained(model_base, torch_dtype=torch.float16, low_cpu_mem_usage=True, device_map="auto")
+            tokenizer = AutoTokenizer.from_pretrained(model_base, use_fast=False)
+            model = AutoModelForCausalLM.from_pretrained(model_base, torch_dtype=torch.float16, low_cpu_mem_usage=True, device_map="auto")
             print(f"Loading LoRA weights from {model_path}")
             model = PeftModel.from_pretrained(model, model_path)
             print(f"Merging weights")
@@ -138,7 +129,6 @@ def load_pretrained_model(model_path, model_base, model_name, load_8bit=False, l
         else:
             tokenizer = AutoTokenizer.from_pretrained(model_path, use_fast=False)
             model = AutoModelForCausalLM.from_pretrained(model_path, low_cpu_mem_usage=True, **kwargs)
-            # model = LlavaPythiaForCausalLM.from_pretrained(model_path, low_cpu_mem_usage=True, **kwargs)
     if "clip" in config.vision_config["vision_tower"]["vision_model_name_or_path"]:
         image_processor = CLIPImageProcessor.from_pretrained(model_path)
     elif "siglip" in config.vision_config["vision_tower"]["vision_model_name_or_path"]:

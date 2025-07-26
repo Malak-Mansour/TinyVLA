@@ -496,7 +496,7 @@ if __name__ == '__main__':
     policy_config = {
         # "model_path": f"/path/to/trained/VLA", # mainly includes the lora weights
         # "model_base": f"/path/to/pretrained/VLM", # used for lora merge weights
-        "model_path": "/l/users/malak.mansour/Datasets/TinyVLA/checkpoint-1000",
+        "model_path": "/l/users/malak.mansour/Datasets/TinyVLA/processed/checkpoint-10000",
         "model_base": "lesjie/Llava-Pythia-400M",
         "enable_lora": True,
         "conv_mode": "pythia",
