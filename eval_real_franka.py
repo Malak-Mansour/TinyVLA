@@ -18,6 +18,7 @@ from einops import rearrange
 import torch_utils as TorchUtils
 import matplotlib.pyplot as plt
 import sys
+from llava_pythia.model.language_model.pythia.configuration_llava_pythia import LlavaPythiaConfig
 
 def get_image(ts, camera_names, rand_crop_resize=False):
     """
@@ -340,7 +341,8 @@ def eval_bc(policy, deploy_env, policy_config, save_episode=True, num_rollouts=1
         rand_crop_resize = True
         temporal_agg = True
 
-    action_dim = policy.config['action_dim']
+    # action_dim = policy.config['action_dim']
+    action_dim = policy.config.action_dim
 
     policy.policy.eval()
 
@@ -356,10 +358,12 @@ def eval_bc(policy, deploy_env, policy_config, save_episode=True, num_rollouts=1
 
     env = deploy_env
 
-    query_frequency = policy.config['chunk_size'] / 2 # specify the exact executed action steps, must be smaller than chunk size
+    # query_frequency = policy.config['chunk_size'] / 2 # specify the exact executed action steps, must be smaller than chunk size
+    query_frequency = policy.config.chunk_size / 2
     if temporal_agg:
         query_frequency = 1
-        num_queries = policy.config['chunk_size']
+        # num_queries = policy.config['chunk_size']
+        num_queries = policy.config.chunk_size
 
     max_timesteps = int(10000)  # may increase for real-world tasks
 
@@ -498,6 +502,7 @@ if __name__ == '__main__':
         # "model_base": f"/path/to/pretrained/VLM", # used for lora merge weights
         "model_path": "/l/users/malak.mansour/Datasets/TinyVLA/processed/checkpoint-10000",
         "model_base": "lesjie/Llava-Pythia-400M",
+        "model_path": "/l/users/malak.mansour/Datasets/TinyVLA/processed/pythia_checkpoint-10000",
         "enable_lora": True,
         "conv_mode": "pythia",
         "action_head": action_head,

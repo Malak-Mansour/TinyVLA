@@ -58,7 +58,8 @@ def load_pretrained_model(model_path, model_base, model_name, load_8bit=False, l
             config = lora_cfg_pretrained
             tokenizer = AutoTokenizer.from_pretrained(model_base, use_fast=True) # default use_fast=False
             print('Loading LLaVA-Pythia from base model...')
-            model = LlavaPythiaForCausalLM.from_pretrained(model_base, low_cpu_mem_usage=True, config=lora_cfg_pretrained, **kwargs)
+            # model = LlavaPythiaForCausalLM.from_pretrained(model_base, low_cpu_mem_usage=True, config=lora_cfg_pretrained, **kwargs)
+            model = LlavaPythiaForCausalLM.from_pretrained(model_base, config=lora_cfg_pretrained, **kwargs)
             
             # token_num, tokem_dim = model.embed_out.out_features, model.embed_out.in_features
             # if model.embed_out.weight.shape[0] != token_num:
@@ -104,11 +105,20 @@ def load_pretrained_model(model_path, model_base, model_name, load_8bit=False, l
             tokenizer = AutoTokenizer.from_pretrained(model_base, use_fast=True)
             # cfg_pretrained = AutoConfig.from_pretrained(model_path)
             cfg_pretrained = LlavaPythiaConfig.from_pretrained(model_path, trust_remote_code=True)  # ✅ Fix: load correct config
-            model = LlavaPythiaForCausalLM.from_pretrained(model_base, low_cpu_mem_usage=True, config=cfg_pretrained, **kwargs)
+            # model = LlavaPythiaForCausalLM.from_pretrained(model_base, low_cpu_mem_usage=True, config=cfg_pretrained, **kwargs)
+            model = LlavaPythiaForCausalLM.from_pretrained(model_base, config=cfg_pretrained, **kwargs)
 
-            mm_projector_weights = torch.load(os.path.join(model_path, 'mm_projector.bin'), map_location='cpu')
-            mm_projector_weights = {k: v.to(torch.float16) for k, v in mm_projector_weights.items()}
-            model.load_state_dict(mm_projector_weights, strict=False)
+            # mm_projector_weights = torch.load(os.path.join(model_path, 'mm_projector.bin'), map_location='cpu')
+            # mm_projector_weights = {k: v.to(torch.float16) for k, v in mm_projector_weights.items()}
+            # model.load_state_dict(mm_projector_weights, strict=False)
+            mm_projector_path = os.path.join(model_path, 'mm_projector.bin')
+            if os.path.exists(mm_projector_path):
+                mm_projector_weights = torch.load(mm_projector_path, map_location='cpu')
+                mm_projector_weights = {k: v.to(torch.float16) for k, v in mm_projector_weights.items()}
+                model.load_state_dict(mm_projector_weights, strict=False)
+            else:
+                print("⚠️ mm_projector.bin not found — skipping projector loading.")
+
         else:
             print("load llaVA-Pythia MLLM!!!")
             config = LlavaPythiaConfig.from_pretrained(model_path, trust_remote_code=True)
@@ -127,7 +137,8 @@ def load_pretrained_model(model_path, model_base, model_name, load_8bit=False, l
             from peft import PeftModel
             tokenizer = AutoTokenizer.from_pretrained(model_base, use_fast=True)
             # model = AutoModelForCausalLM.from_pretrained(model_base, torch_dtype=torch.float16, low_cpu_mem_usage=True, device_map="auto")
-            model = AutoModelForCausalLM.from_pretrained(model_base, low_cpu_mem_usage=True, **kwargs)
+            # model = AutoModelForCausalLM.from_pretrained(model_base, low_cpu_mem_usage=True, **kwargs)
+            model = AutoModelForCausalLM.from_pretrained(model_base, **kwargs)
             # model = LlavaPythiaForCausalLM.from_pretrained(model_base, torch_dtype=torch.float16, low_cpu_mem_usage=True, device_map="auto")
             print(f"Loading LoRA weights from {model_path}")
             model = PeftModel.from_pretrained(model, model_path)
@@ -137,8 +148,10 @@ def load_pretrained_model(model_path, model_base, model_name, load_8bit=False, l
             model.to(torch.float16)
         else:
             tokenizer = AutoTokenizer.from_pretrained(model_path, use_fast=False)
-            model = AutoModelForCausalLM.from_pretrained(model_path, low_cpu_mem_usage=True, **kwargs)
+            # model = AutoModelForCausalLM.from_pretrained(model_path, low_cpu_mem_usage=True, **kwargs)
+            model = AutoModelForCausalLM.from_pretrained(model_path, **kwargs)
             # model = LlavaPythiaForCausalLM.from_pretrained(model_path, low_cpu_mem_usage=True, **kwargs)
+    config = model.config  # ✅ Fix: ensure config is defined and points to the correct one
     if "clip" in config.vision_config["vision_tower"]["vision_model_name_or_path"]:
         image_processor = CLIPImageProcessor.from_pretrained(model_path)
     elif "siglip" in config.vision_config["vision_tower"]["vision_model_name_or_path"]:

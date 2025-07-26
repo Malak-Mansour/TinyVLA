@@ -54,14 +54,35 @@ class LlavaPythiaForCausalLM(GPTNeoXPreTrainedModel, LlavaMetaForCausalLM):
             from diffusers.schedulers.scheduling_ddim import DDIMScheduler
             from policy_heads.models import ConditionalUnet1D
             self.proj_to_action = nn.Identity()
+            import math
+            # Generate squaredcos_cap_v2 betas manually in float32
+            def make_betas_squaredcos_cap_v2(num_train_timesteps):
+                betas = []
+                for i in range(num_train_timesteps):
+                    t1 = i / num_train_timesteps
+                    t2 = (i + 1) / num_train_timesteps
+                    alpha_bar_t1 = math.cos((t1 + 0.008) / 1.008 * math.pi / 2) ** 2
+                    alpha_bar_t2 = math.cos((t2 + 0.008) / 1.008 * math.pi / 2) ** 2
+                    betas.append(min(1 - alpha_bar_t2 / alpha_bar_t1, 0.999))
+                return torch.tensor(betas, dtype=torch.float32)
+
+            # 1. Manually create float32 betas
+            betas = make_betas_squaredcos_cap_v2(num_train_timesteps=100)
+
+            # 2. Instantiate DDIMScheduler without crashing
             self.noise_scheduler = DDIMScheduler(
                 num_train_timesteps=100,
-                beta_schedule='squaredcos_cap_v2',
                 clip_sample=True,
                 set_alpha_to_one=True,
                 steps_offset=0,
                 prediction_type='epsilon'
             )
+
+            # 3. Inject float32 betas and recompute alphas
+            self.noise_scheduler.betas = betas
+            self.noise_scheduler.alphas = 1.0 - betas
+            self.noise_scheduler.alphas_cumprod = torch.cumprod(self.noise_scheduler.alphas, dim=0)
+
             self.embed_out = ConditionalUnet1D(
                 input_dim=config.action_dim,
                 global_cond_dim=config.hidden_size,
