@@ -20,6 +20,35 @@ import matplotlib.pyplot as plt
 import sys
 from llava_pythia.model.language_model.pythia.configuration_llava_pythia import LlavaPythiaConfig
 
+
+
+class HeadlessSimEnv:
+    def __init__(self, image_shape=(240, 320, 3), robot_state_dim=10):
+        self.image_shape = image_shape
+        self.robot_state_dim = robot_state_dim
+        self.timestep = 0
+
+    def reset(self, randomize=False):
+        print("🔁 [HeadlessSim] Resetting environment")
+        self.timestep = 0
+        return self.get_observation()
+
+    def get_observation(self):
+        # Return dummy camera + robot state
+        return {
+            "images": {
+                "agentview": np.zeros(self.image_shape, dtype=np.uint8),
+                "overhead": np.zeros(self.image_shape, dtype=np.uint8)
+            },
+            "robot_state": np.zeros(self.robot_state_dim, dtype=np.float32)
+        }
+
+    def step(self, action):
+        print(f"🚶 [HeadlessSim] Stepping with action {np.round(action, 3)}")
+        self.timestep += 1
+        return {"done": self.timestep > 100}
+
+
 def get_image(ts, camera_names, rand_crop_resize=False):
     """
     Retrieves and processes images from the specified cameras.
@@ -69,14 +98,44 @@ def pre_process(robot_state_value, key, stats):
     return tmp
 
 
-def get_obs():
-    """
-    Retrieves observations (images and robot states) from the robot environment.
+# def get_obs():
+#     """
+#     Retrieves observations (images and robot states) from the robot environment.
 
-    Returns:
-        A tuple containing images and states.
-    """
-    return None, None # images, states
+#     Returns:
+#         A tuple containing images and states.
+#     """
+#     return None, None # images, states
+# def get_obs(obs, stats):
+#     """
+#     Converts raw env obs into (image, robot_state) tensors.
+#     """
+#     traj_rgb_np = np.stack([obs["images"]["agentview"], obs["images"]["overhead"]], axis=0)
+#     traj_rgb_np = np.transpose(traj_rgb_np, (0, 3, 1, 2))  # → (2, 3, H, W)
+
+#     # Normalize robot state
+#     robot_state = obs["robot_state"]
+#     if "robot_state_mean" in stats and "robot_state_std" in stats:
+#         norm_robot_state = (robot_state - stats["robot_state_mean"]) / stats["robot_state_std"]
+#     else:
+#         print("⚠️ robot_state_mean/std not found — using raw robot_state")
+#         norm_robot_state = robot_state
+
+#     return traj_rgb_np, norm_robot_state
+def get_obs(obs, stats):
+    traj_rgb_np = np.stack([obs["agentview_rgb"], obs["overhead_rgb"]], axis=0)  # (2, H, W, C)
+    traj_rgb_np = np.transpose(traj_rgb_np, (0, 3, 1, 2))  # (2, 3, H, W)
+
+    robot_state = obs["state"]  # or obs["state"]["robot"]
+    if "robot_state_mean" in stats and "robot_state_std" in stats:
+        norm_robot_state = (
+            (robot_state - stats["robot_state_mean"]) / stats["robot_state_std"]
+            if "robot_state_mean" in stats else robot_state
+        )
+    else:
+        print("⚠️ robot_state_mean/std not found — using raw robot_state")
+        norm_robot_state = robot_state
+    return traj_rgb_np, norm_robot_state
 
 
 def time_ms():
@@ -369,7 +428,8 @@ def eval_bc(policy, deploy_env, policy_config, save_episode=True, num_rollouts=1
 
     for rollout_id in range(num_rollouts):
         rollout_id += 0
-        env.reset(randomize=False)
+        # env.reset(randomize=False)
+        env.reset()
 
         print(f"env has reset!")
 
@@ -516,11 +576,129 @@ if __name__ == '__main__':
     # policy = llava_pythia_act_policy(policy_config)
     policy = llava_pythia_act_policy(policy_config, print_cot=True)
 
+    print(dir(policy))
+
 
     ############################################################################################################
     # This is your own robot environment, you should init a new env object
-    deploy_env = None
-    ############################################################################################################
+    # deploy_env = None
+    # deploy_env = HeadlessSimEnv(image_shape=(im_size, im_size, 3), robot_state_dim=policy.config.state_dim)
+    
+    import sys
+    sys.path.append("/l/users/malak.mansour/ICL/LIBERO")
+
+    # from l.users.malak.mansour.ICL.LIBERO.libero.libero.envs import make
+    # from libero.libero.envs import make
+    # import os
+    # os.environ["ROBO_SUITE_LOG_PATH"] = "/l/users/malak.mansour/Datasets/robosuite_tmp"
+    # # Define your task, camera setup, and rendering config
+    # deploy_env = make(
+    #     task_name="lift_coke",  # ✅ built-in test task
+    #     # env_cfg="libero_rearrange.yaml",  # Or other task config
+    #     obs_modality=["rgb", "state"],
+    #     render_camera_names=["agentview", "overhead"],
+    #     render_size=(320, 320),
+    #     use_renderer=True,
+    #     renderer="mujoco",
+    #     headless=True,
+    # )
+    ###
+
+    # export MUJOCO_GL=osmesa
+    # export PYOPENGL_PLATFORM=osmesa
+    import libero.libero.envs.bddl_utils as BDDLUtils
+    from libero.libero.envs.env_wrapper import DemoRenderEnv
+    from PIL import Image
+    import imageio
+
+    # ==== CONFIG ====
+    TASK_BDDL = "/l/users/malak.mansour/ICL/LIBERO/libero/libero/bddl_files/libero_90/KITCHEN_SCENE7_open_the_microwave.bddl"
+    NUM_STEPS = 20
+    IMAGE_SAVE_DIR = "offscreen_render_output"
+    CAMERA_NAME = "agentview"
+    HEIGHT = 128
+    WIDTH = 128
+
+    # Create output dir
+    os.makedirs(IMAGE_SAVE_DIR, exist_ok=True)
+
+    # ==== INIT ENV ====
+    demo = DemoRenderEnv(
+        bddl_file_name=TASK_BDDL,
+        robots=["Panda"],
+        controller="OSC_POSE",
+        camera_names=[CAMERA_NAME],
+        camera_heights=HEIGHT,
+        camera_widths=WIDTH,
+    )
+
+    # ==== RUN AND RENDER ====
+    obs = demo.reset()
+    done = False
+    step = 0
+
+
+    # SAVE A VIDEO
+    frames = []
+
+
+    while not done and step < NUM_STEPS:
+
+        # Get the image from the simulator
+        image_np = demo.env.sim.render(
+            camera_name=CAMERA_NAME,
+            height=HEIGHT,
+            width=WIDTH,
+            device_id=0,
+        )
+
+
+        # action = np.zeros(demo.env.action_dim)  # Replace with your model's action
+
+
+        # Convert image to torch format [1, 2, 3, H, W]
+        image = torch.from_numpy(image_np).permute(2, 0, 1).unsqueeze(0).float() / 255.
+        curr_image = torch.cat([image, image], dim=0).unsqueeze(0)  # [1, 2, 3, H, W]
+        # Prepare dummy robot state
+        robo_state = torch.zeros(1, policy.config.state_dim)
+        # 1. Preprocess input
+        batch = policy.process_batch_to_llava(curr_image, robo_state, raw_lang)
+        # 2. Get action
+        action = policy.policy(**batch)
+
+
+        # 3. Step the environment
+        obs, reward, done, info = demo.step(action.squeeze().cpu().numpy())
+
+
+        # SAVE IMAGES
+        # image_path = os.path.join(IMAGE_SAVE_DIR, f"frame_{step:04d}.png")
+        # Image.fromarray(image).save(image_path)
+
+        # print(f"[INFO] Saved frame {step} to {image_path}")
+
+
+        # SAVE A VIDEO
+        frames.append(image_np)
+        print(f"[INFO] Captured frame {step}")
+
+
+
+        step += 1
+
+
+    # SAVE A VIDEO
+    video_path = os.path.join(IMAGE_SAVE_DIR, "output.mp4")
+    imageio.mimsave(video_path, frames, fps=10)
+    print(f"[INFO] Saved video to {video_path}")
+
+
+    demo.close()
+    deploy_env=demo
+
+
+
+
+    #########################################################################################################
 
     eval_bc(policy, deploy_env, policy_config, save_episode=True, num_rollouts=1, raw_lang=raw_lang)
-

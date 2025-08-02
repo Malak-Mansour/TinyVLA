@@ -1,26 +1,3 @@
-# BAKU: An Efficient Transformer for Multi-Task Policy Learning
-
-This is a repository containing the code for the paper [BAKU: An Efficient Transformer for Multi-Task Policy Learning](https://arxiv.org/abs/2406.07539).
-
-![intro](https://github.com/siddhanthaldar/baku-release/assets/25313941/7df30d79-6864-4b39-bd33-55376829b28e)
-
-## Installation Instructions
-
-In order to install the required dependencies, please follow the instructions provide [here](Instructions.md).
-
-## Access to Datasets
-We have added the instructions for running BAKU on the LIBERO benchmark [here](Instructions.md). For access to the datasets for Meta-World, DMControl, and the real world xArm Kitchen, please send an email to the sh6474@nyu.edu. 
-
-## Bibtex
-If you find this work useful, please cite the paper using the following bibtex:
-```
-@article{haldar2024baku,
-  title={BAKU: An Efficient Transformer for Multi-Task Policy Learning},
-  author={Haldar, Siddhant and Peng, Zhuoran and Pinto, Lerrel},
-  journal={arXiv preprint arXiv:2406.07539},
-  year={2024}
-}
-```
 # Install libgpg-error (newer version for compatibility)
 ```
 conda install -c conda-forge glew
@@ -35,11 +12,28 @@ conda install -c menpo osmesa=12.2.2.dev
 
 # extra step to install this version of gcc 
 one of these 3:
-- ⁠conda install 
-- module load gcc-7
+<!-- - ⁠conda install 
+- module load gcc-7 -->
 - ⁠module load gcc-8
+<!-- check if it is loaded with: gcc --version
+gcc (Ubuntu 8.4.0-3ubuntu2) 8.4.0
+Copyright (C) 2018 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ -->
+
+
 
 # Library 1
+<!-- if this fails at: ./configure --prefix=$CONDA_PREFIX -->
+```
+cd libgpg-error-1.47
+make clean 2>/dev/null || true
+rm -rf build CMakeCache.txt CMakeFiles config.log config.status Makefile
+conda install -c conda-forge gcc=11.4.0 gxx=11.4.0
+export PATH=$CONDA_PREFIX/bin:$PATH
+```
+
 ```
 wget https://www.gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.47.tar.bz2
 tar xjf libgpg-error-1.47.tar.bz2
@@ -94,6 +88,3 @@ export PYOPENGL_PLATFORM=osmesa
 
 # suggestions from here
 # https://pytorch.org/rl/stable/reference/generated/knowledge_base/MUJOCO_INSTALLATION.html
- 
- 
-

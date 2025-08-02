@@ -1,0 +1,6 @@
+mpih-mul2-asm.lo: mpih-mul2-asm.S \
+ /l/users/malak.mansour/anaconda3/envs/tinyvla/x86_64-conda-linux-gnu/sysroot/usr/include/stdc-predef.h \
+ sysdep.h asm-syntax.h
+/l/users/malak.mansour/anaconda3/envs/tinyvla/x86_64-conda-linux-gnu/sysroot/usr/include/stdc-predef.h:
+sysdep.h:
+asm-syntax.h:

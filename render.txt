@@ -1,0 +1,29 @@
+First do render.md steps 
+
+
+pip install mujoco
+
+cd /l/users/malak.mansour/ICL
+git clone https://github.com/Lifelong-Robot-Learning/LIBERO.git
+cd LIBERO
+pip install -r requirements.txt
+pip install -e .
+
+
+pip install git+https://github.com/ARISE-Initiative/robosuite.git
+
+pip uninstall robosuite -y #assuming it was 1.5
+pip install robosuite==1.4.0
+
+export ROBO_SUITE_LOG_PATH="/l/users/malak.mansour/Datasets/robosuite_tmp"
+mkdir -p $ROBO_SUITE_LOG_PATH
+
+Go to: /l/users/malak.mansour/anaconda3/envs/tinyvla/lib/python3.10/site-packages/robosuite/utils/log_utils.py
+Find this line (around line 71): fh = logging.FileHandler("/tmp/robosuite.log")
+Replace it with:
+    import os
+    log_path = os.environ.get("ROBO_SUITE_LOG_PATH", "/tmp")
+    fh = logging.FileHandler(os.path.join(log_path, "robosuite.log"))
+
+
+pip install transformers==4.39.3
