@@ -327,8 +327,12 @@ class EpisodicDataset(torch.utils.data.Dataset):
             ep_group = root if ep_name is None else root[ep_name]
             obs = ep_group["obs"]
 
-            # qpos: use joint_state directly
-            qpos = obs["joint_state"][()]  # (T, 7)
+            # qpos: use joint_state directly  (T, 7)
+            #"joint_state" for cot, "joint_states" for no cot 
+            qpos = obs.get("joint_state", obs.get("joint_states", None))
+            if qpos is None:
+                print(f"⚠️ Missing 'joint_state' or 'joint_states' in {dataset_path}")
+            qpos = qpos[()]  # extract the dataset content
 
             # Load image(s)
             image_dict = {}
@@ -687,11 +691,18 @@ def get_norm_stats(dataset_path_list):
 
                 obs = f["obs"]
 
-                if "joint_state" not in obs:
-                    print(f"⚠️ Skipping {dataset_path}: Missing joint_state in obs")
+                if "joint_state" not in obs and "joint_states" not in obs:
+                    print(f"⚠️ Skipping {dataset_path}: Missing joint_state or joint_states in obs")
                     continue
 
-                qpos = obs["joint_state"][()]
+                #"joint_state" for cot, "joint_states" for no cot
+                qpos = obs.get("joint_state", obs.get("joint_states", None))
+                if qpos is None:
+                    print(f"⚠️ Missing 'joint_state' or 'joint_states' in {dataset_path}")
+                    continue
+                qpos = qpos[()]  # extract the dataset content
+
+
                 action = f["actions"][()]
 
                 if len(qpos) != len(action):
@@ -908,7 +919,8 @@ def load_data(dataset_dir, name_filter, camera_names, batch_size_train, batch_si
     episode_len_list = []
     for file_path in dataset_path_list:
         with h5py.File(file_path, 'r') as f:
-            if "actions" in f and "obs" in f and "joint_state" in f["obs"]:
+            #"joint_state" for cot, "joint_states" for no cot 
+            if "actions" in f and "obs" in f and ("joint_state" in f["obs"] or "joint_states" in f["obs"]):
                 episode_ids.append((file_path, None))  # None = no inner group
                 ep_len = len(f["actions"])
                 episode_len_list.append(ep_len)

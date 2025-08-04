@@ -429,9 +429,10 @@ def eval_bc(policy, deploy_env, policy_config, save_episode=True, num_rollouts=1
     for rollout_id in range(num_rollouts):
         rollout_id += 0
         # env.reset(randomize=False)
+        logger.debug(f"[eval_bc] Resetting environment for rollout {rollout_id}")
         env.reset()
 
-        print(f"env has reset!")
+        logger.info(f"Environment has been reset for rollout {rollout_id}")
 
         ### evaluation loop
         if temporal_agg:
@@ -449,6 +450,7 @@ def eval_bc(policy, deploy_env, policy_config, save_episode=True, num_rollouts=1
             for t in range(max_timesteps):
 
                 obs = deploy_env.get_observation()
+                logger.debug(f"[eval_bc] Observation keys: {list(obs.keys())}")
 
                 traj_rgb_np, robot_state = get_obs(obs, stats)
                 image_list.append(traj_rgb_np)
@@ -534,6 +536,7 @@ def eval_bc(policy, deploy_env, policy_config, save_episode=True, num_rollouts=1
                 ### step the environment
                 # ts = env.step(action)
                 print(f'step {t}, pred action: {action}')
+                logger.debug(f"[eval_bc] Action at timestep {t}: {action}")
                 action_info = deploy_env.step(action)
 
                 ### for visualization
@@ -574,9 +577,8 @@ if __name__ == '__main__':
 
     # make policy
     # policy = llava_pythia_act_policy(policy_config)
-    policy = llava_pythia_act_policy(policy_config, print_cot=True)
-
-    print(dir(policy))
+    policy = llava_pythia_act_policy(policy_config, print_cot=False)
+    # print(dir(policy))
 
 
     ############################################################################################################
@@ -606,10 +608,19 @@ if __name__ == '__main__':
 
     # export MUJOCO_GL=osmesa
     # export PYOPENGL_PLATFORM=osmesa
+    # export ROBO_SUITE_LOG_PATH="/l/users/malak.mansour/Datasets/robosuite_tmp"
+    os.environ["MUJOCO_GL"] = "osmesa"
+    os.environ["PYOPENGL_PLATFORM"] = "osmesa" 
+    os.environ["ROBO_SUITE_LOG_PATH"] = "/l/users/malak.mansour/Datasets/robosuite_tmp"
+
     import libero.libero.envs.bddl_utils as BDDLUtils
     from libero.libero.envs.env_wrapper import DemoRenderEnv
     from PIL import Image
     import imageio
+    import logging
+
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger(__name__)
 
     # ==== CONFIG ====
     TASK_BDDL = "/l/users/malak.mansour/ICL/LIBERO/libero/libero/bddl_files/libero_90/KITCHEN_SCENE7_open_the_microwave.bddl"
@@ -664,11 +675,26 @@ if __name__ == '__main__':
         # 1. Preprocess input
         batch = policy.process_batch_to_llava(curr_image, robo_state, raw_lang)
         # 2. Get action
+        logger.debug(f"Step {step}: Calling policy with batch keys: {list(batch.keys())}")
         action = policy.policy(**batch)
 
+        if isinstance(action, torch.Tensor):
+            logger.debug(f"Step {step}: Action shape {action.shape} — action: {action.detach().cpu().numpy()}")
+        elif hasattr(action, "logits") and isinstance(action.logits, torch.Tensor):
+            logger.debug(f"Step {step}: Action shape {action.logits.shape} — action: {action.logits.detach().cpu().numpy()}")
+        else:
+            logger.debug(f"Step {step}: Action is not a tensor: {action}")
 
+        print(action)
         # 3. Step the environment
-        obs, reward, done, info = demo.step(action.squeeze().cpu().numpy())
+        if hasattr(action, "logits") and isinstance(action.logits, torch.Tensor):
+            action_tensor = action.logits
+        else:
+            raise ValueError("Expected action to have a 'logits' tensor, but got something else")
+        obs, reward, done, info = demo.step(action_tensor.squeeze().cpu().numpy())
+        # obs, reward, done, info = demo.step(action.squeeze().cpu().numpy())
+        logger.debug(f"Step {step}: Env step — reward: {reward}, done: {done}, info: {info}")
+
 
 
         # SAVE IMAGES
@@ -702,3 +728,4 @@ if __name__ == '__main__':
     #########################################################################################################
 
     eval_bc(policy, deploy_env, policy_config, save_episode=True, num_rollouts=1, raw_lang=raw_lang)
+    logger.debug("✅ Evaluation complete.")

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH --job-name=train_tinyvla_libero
+#SBATCH --job-name=train_tinyvla_ECoT_libero
 #SBATCH --output=logs/debug_%j.out
 #SBATCH --error=logs/debug_%j.err
 #SBATCH --ntasks=1
@@ -28,7 +28,7 @@
 ACTION_HEAD=droid_diffusion # specify action policy head type
 # define OUTPUT path
 
-OUTPUT=/l/users/malak.mansour/Datasets/TinyVLA
+OUTPUT=/l/users/malak.mansour/Datasets/TinyVLA_CoT
 
 if [ -d "$OUTPUT" ]; then
    echo 'output exists'
@@ -65,7 +65,7 @@ deepspeed --master_port 29600 --num_gpus=1 --num_nodes=1 ./train_tinyvla.py \
   --lora_r 64 \
   --lora_alpha 256 \
   --non_lora_lr 2e-5 \
-  --task_name "libero" \
+  --task_name "libero_cot" \
   --model_name_or_path lesjie/Llava-Pythia-400M \
   --version v0 \
   --tune_mm_mlp_adapter True \
@@ -98,7 +98,7 @@ deepspeed --master_port 29600 --num_gpus=1 --num_nodes=1 ./train_tinyvla.py \
   --concat "token_cat" \
   --window_size 6 \
   --report_to none \
-  --use_cot False \
+  --use_cot True \
   --logging_dir $OUTPUT/log
 
 for dir in "$OUTPUT"/*/ ; do

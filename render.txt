@@ -1,6 +1,5 @@
 First do render.md steps 
 
-
 pip install mujoco
 
 cd /l/users/malak.mansour/ICL
@@ -26,4 +25,12 @@ Replace it with:
     fh = logging.FileHandler(os.path.join(log_path, "robosuite.log"))
 
 
-pip install transformers==4.39.3
+pip install torch==2.1.2 torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+
+
+
+pip show accelerate transformers numpy huggingface_hub | grep Version
+Version: 1.9.0
+Version: 4.40.2 
+Version: 1.26.4
+Version: 0.22.2
