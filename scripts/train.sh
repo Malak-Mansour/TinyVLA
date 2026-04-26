@@ -83,7 +83,7 @@ deepspeed --master_port 29600 --num_gpus=1 --num_nodes=1 ./train_tinyvla.py \
   --concat "token_cat" \
   --window_size 6 \
   --report_to none \
-  # --use_cot True \
+  --use_cot True \
   --logging_dir $OUTPUT/log
 
 for dir in "$OUTPUT"/*/ ; do

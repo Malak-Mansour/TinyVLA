@@ -194,25 +194,24 @@ class LlavaPythiaConfig(GPTNeoXConfig):
         self,
         vision_config=None,
         projector_config=None,
-        action_head_type="none",     # ✅ REQUIRED
-        action_dim=None,             # ✅ REQUIRED
-        state_dim=None,              # ✅ REQUIRED
-        use_state=False,             # ✅ REQUIRED
-        concat="None",               # ✅ Add this too
+        action_head_type="none",
+        action_dim=None,
+        state_dim=None,
+        use_state=False,
+        concat="None",
         **kwargs
     ):
-        # Store visual config
+        self.use_cot = kwargs.pop("use_cot", False)
+
         self.vision_config = vision_config or DEFAULT_VISUAL_CONFIG
         self.projector_config = projector_config or self.vision_config.get("mm_projector", {})
-        
-        # Register custom fields
+
         self.action_head_type = action_head_type
         self.action_dim = action_dim
         self.state_dim = state_dim
         self.use_state = use_state
         self.concat = concat
 
-        # Call parent constructor with remaining kwargs
         super().__init__(**kwargs)
 
 if __name__ == "__main__":

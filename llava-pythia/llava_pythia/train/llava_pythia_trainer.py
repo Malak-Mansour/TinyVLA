@@ -219,6 +219,34 @@ class LLaVAPythiaTrainer(Trainer):
             dataloader_params["drop_last"] = self.args.dataloader_drop_last
 
         return self.accelerator.prepare(DataLoader(eval_dataset, **dataloader_params))
+    
+    # def evaluate(self, eval_dataset: Optional[Dataset] = None, **kwargs):
+    #     eval_dataloader = self.get_eval_dataloader(eval_dataset)
+    #     output_dir = self.args.output_dir
+    #     os.makedirs(output_dir, exist_ok=True)
+    #     log_path = os.path.join(output_dir, "cot_eval_outputs.txt")
+
+    #     self.model.eval()
+    #     with open(log_path, "w") as log_fp:
+    #         for idx, batch in enumerate(eval_dataloader):
+    #             with torch.no_grad():
+    #                 # Get model outputs (adapt this if your model requires more args)
+    #                 outputs = self.model.generate(
+    #                     input_ids=batch["input_ids"].to(self.args.device),
+    #                     attention_mask=batch["attention_mask"].to(self.args.device),
+    #                     images=batch["image"].to(self.args.device),  # May need renaming depending on your dataset
+    #                     max_new_tokens=64,
+    #                 )
+    #                 decoded_outputs = self.tokenizer.batch_decode(outputs, skip_special_tokens=True)
+    #                 prompts = self.tokenizer.batch_decode(batch["input_ids"], skip_special_tokens=True)
+
+    #                 for i, (prompt, answer) in enumerate(zip(prompts, decoded_outputs)):
+    #                     log_fp.write(f"--- Sample {idx * len(decoded_outputs) + i} ---\n")
+    #                     log_fp.write(f"[Prompt]\n{prompt.strip()}\n")
+    #                     log_fp.write(f"[Answer]\n{answer.strip()}\n\n")
+
+    #     print(f"[✓] Evaluation results with CoT saved to {log_path}")
+    #     return {"eval_log_path": log_path}
 
     def _get_train_sampler(self) -> Optional[torch.utils.data.Sampler]:
         if self.train_dataset is None or not has_length(self.train_dataset):

@@ -1,0 +1,555 @@
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box
+
+[CoT] Prompt (index=2):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=2):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=2):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=2):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 3 release
+
+[CoT] Prompt (index=2):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=2):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=2):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box
+
+[CoT] Prompt (index=2):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box
+
+[CoT] Prompt (index=2):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=2):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box
+
+[CoT] Prompt (index=2):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=2):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box
+
+[CoT] Prompt (index=2):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=2):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=2):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=2):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 3 release
+
+[CoT] Prompt (index=2):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=2):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=2):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box
+
+[CoT] Prompt (index=2):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=1):
+<image>
+hdf5
+Let's think step by step: step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 2 move to the box step 3 release
+
+[CoT] Prompt (index=2):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object
+
+[CoT] Prompt (index=2):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=1):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=2):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=1):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=2):
+<image>
+hdf5
+Let's think step by step: step 2 move to the box step 3 release
+
+[CoT] Prompt (index=1):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box
+
+[CoT] Prompt (index=2):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=1):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box
+
+[CoT] Prompt (index=2):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box
+
+[CoT] Prompt (index=2):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box
+
+[CoT] Prompt (index=2):
+<image>
+hdf5
+Let's think step by step: step 2 move to the box
+
+[CoT] Prompt (index=1):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=2):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=1):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=2):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=2):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=1):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box
+
+[CoT] Prompt (index=2):
+<image>
+hdf5
+Let's think step by step: step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=2):
+<image>
+hdf5
+Let's think step by step: step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=2):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 2 move to the box step 3 release
+
+[CoT] Prompt (index=1):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 3 release
+
+[CoT] Prompt (index=1):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=1):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=2):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=1):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=2):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 2 move to the box step 3 release
+
+[CoT] Prompt (index=2):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=2):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 2 move to the box step 3 release
+
+[CoT] Prompt (index=1):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box
+
+[CoT] Prompt (index=1):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=2):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=2):
+<image>
+hdf5
+Let's think step by step: step 1 pick up the object step 2 move to the box step 3 release
+
+[CoT] Prompt (index=0):
+<image>
+hdf5
+Let's think step by step: step 2 move to the box step 3 release

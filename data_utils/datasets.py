@@ -15,6 +15,32 @@ from data_utils.processor import preprocess, preprocess_multimodal
 import copy
 e = IPython.embed
 
+from .cot_utils import CotTag, abbreviate_tag, get_cot_tags_list
+from typing import Any, Dict, Tuple, Type
+def reasoning_dropout(reasoning: str, dropout_prob: float = 0.0) -> Tuple[str, str]:
+    if len(reasoning) == 0:
+        return reasoning, ""
+
+    reasoning_parts = reasoning.split("@")
+
+    if len(reasoning_parts) % 2 != 0:
+        reasoning_parts = reasoning_parts[:-1]  # drop the dangling part if odd
+
+    tags = [(reasoning_parts[i], reasoning_parts[i + 1]) for i in range(0, len(reasoning_parts), 2)]
+
+    subset = np.random.rand(len(tags)) > dropout_prob
+    subset_string = "[" + ", ".join([abbreviate_tag(tag) for (tag, _), is_taken in zip(tags, subset) if is_taken]) + "]"
+
+    return (
+        " ".join(
+            f"{tag[0]} {tag[1]}"
+            for tag, is_taken in zip(tags, subset)
+            if is_taken
+        ),
+        subset_string,
+    )
+
+
 def flatten_list(l):
     return [item for sublist in l for item in sublist]
 
@@ -239,9 +265,30 @@ class EpisodicDataset(torch.utils.data.Dataset):
             # Infer raw_lang from task directory
             file_name = os.path.basename(os.path.dirname(dataset_path))
             raw_lang = file_name.replace("_", " ")
-            # if self.use_cot:
-            #     raw_lang += "\nLet's think step by step."
 
+            # if self.use_cot:
+            #     dummy_reasoning = "step 1@pick up the object@step 2@move to the box@step 3@release"
+            #     full_lang = raw_lang + f"\n{dummy_reasoning}"
+            #     reasoning_str, subset_str = reasoning_dropout(dummy_reasoning, dropout_prob=0.2)  # 20% dropout
+            #     raw_lang += f"\nLet's think step by step: {reasoning_str}"
+
+            if self.use_cot:
+                cot_text = ""
+                if "reasoning" in ep_group:
+                    reasoning_group = ep_group["reasoning"]
+                    for tag in get_cot_tags_list():
+                        tag_key = tag.strip(":").lower().replace(" ", "_")  # Convert "MOVE REASONING:" → "move_reasoning"
+                        if tag_key in reasoning_group:
+                            tag_value = reasoning_group[tag_key][()].decode("utf-8")  # stored as bytes in HDF5
+                            cot_text += f"{tag} {tag_value}\n"
+
+                raw_lang += f"\nLet's think step by step:\n{cot_text}"
+                
+                if index < 3:
+                    print(f"[CoT] raw_lang (index={index}):\n{raw_lang}\nTags kept: {subset_str}")
+
+
+            
         padded_action = np.zeros((self.max_episode_len, original_action_shape[1]), dtype=np.float32)
         padded_action[:action_len] = action
         is_pad = np.zeros(self.max_episode_len)
@@ -299,8 +346,13 @@ class EpisodicDataset(torch.utils.data.Dataset):
             'raw_lang': raw_lang
         }
 
-        # if self.use_cot and index < 3:
-        #     print(f"[CoT] raw_lang (index={index}):\n{raw_lang}\n")
+        if self.use_cot and index < 3:
+            print(f"[CoT] raw_lang (index={index}):\n{raw_lang}\n")
+            sample["log_prompt"] = True
+            sample["index"] = index
+
+        # sample["image"] = image_data  # ensure correct key for .generate
+
 
         return self.llava_pythia_process.forward_process(sample)
     '''
@@ -505,6 +557,15 @@ class LlavaPythiaProcess:
         sources = preprocess_multimodal(
             copy.deepcopy([e["conversations"] for e in sources]),
             self.data_args)
+        
+        self.data_args.output_dir = "./outputs"  # or any path you want
+        if getattr(self.data_args, "use_cot", False) and sample.get("log_prompt", False):
+            full_prompt = sources[0][0]["value"]
+            os.makedirs(self.data_args.output_dir, exist_ok=True)
+            cot_log_path = os.path.join(self.data_args.output_dir, "cot_prompts.txt")
+            with open(cot_log_path, "a") as f:
+                f.write(f"\n[CoT] Prompt (index={sample.get('index', -1)}):\n{full_prompt}\n")
+
 
         data_dict = preprocess(
             sources,
@@ -846,7 +907,7 @@ def BatchSampler(batch_size, episode_len_l, sample_weights):
 def load_data(dataset_dir, name_filter, camera_names, batch_size_train, batch_size_val, chunk_size, config,
               skip_mirrored_data=False, policy_class=None, stats_dir_l=None, sample_weights=None,
               train_ratio=0.99, return_dataset=False, llava_pythia_process=None
-            #   , use_cot=False
+              , use_cot=False
               ):
     dataset_path_list = find_all_hdf5(dataset_dir, skip_mirrored_data)
     dataset_path_list = [n for n in dataset_path_list if name_filter(n)]
@@ -887,13 +948,13 @@ def load_data(dataset_dir, name_filter, camera_names, batch_size_train, batch_si
                                     train_episode_len, chunk_size, policy_class,
                                     llava_pythia_process=llava_pythia_process,
                                     imsize=config['training_args'].pretrain_image_size
-                                    # , use_cot=use_cot
+                                    , use_cot=use_cot
                                     )
     val_dataset = EpisodicDataset(dataset_path_list, camera_names, norm_stats, val_episode_ids,
                                   val_episode_len, chunk_size, policy_class,
                                   llava_pythia_process=llava_pythia_process,
                                   imsize=config['training_args'].pretrain_image_size
-                                #   , use_cot=use_cot
+                                  , use_cot=use_cot
                                   )
 
     sampler_params = {

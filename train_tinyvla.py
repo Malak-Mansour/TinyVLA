@@ -194,6 +194,14 @@ def train_bc(train_dataset=None, val_dataset=None, model=None, config=None, samp
     """
     set_seed(config['training_args'].seed)
 
+    use_cot = getattr(config.get("data_args", {}), "use_cot", False)
+    cot_output_path = os.path.join(config['training_args'].output_dir, "cot_output.txt")
+    logged_prompt_ids = set()
+
+    if use_cot:
+        print(f"[CoT] Enabled. Logging prompts to: {cot_output_path}")
+
+
     data_collator = DataCollatorForSupervisedDataset(tokenizer=tokenizer)
 
     data_module = dict(train_dataset=train_dataset,
